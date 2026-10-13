@@ -1,0 +1,12 @@
+{
+  "name": "まなびの おうち",
+  "short_name": "まなびのおうち",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#fbf3e4",
+  "theme_color": "#f0a35e",
+  "icons": [
+    { "src": "img/characters/haro_normal.jpg", "sizes": "768x1024", "type": "image/jpeg" }
+  ]
+}

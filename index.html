@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#f0a35e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="まなびのおうち">
+  <title>まなびの おうち</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="img/characters/haro_normal.jpg">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="app">
+
+    <!-- さいしょの なかま選び -->
+    <section id="screen-first" class="screen">
+      <img class="title-image" src="img/title.jpg" alt="">
+      <h1 class="title">まなびの おうち</h1>
+      <p class="lead">いっしょに くらす なかまを えらんでね</p>
+      <div id="first-list" class="first-list"></div>
+    </section>
+
+    <!-- ホーム -->
+    <section id="screen-home" class="screen">
+      <header class="topbar">
+        <div class="points"><span class="coin">⭐</span><span class="points-value">0</span></div>
+        <div id="home-streak" class="streak"></div>
+        <button id="btn-sound" class="icon-btn">🔊</button>
+      </header>
+      <h1 class="title small">まなびの おうち</h1>
+      <div id="home-chara" class="home-stage"></div>
+      <p id="home-talk" class="talk"></p>
+      <button id="btn-study" class="btn btn-orange btn-huge">✏️ べんきょうする</button>
+      <div class="menu-grid">
+        <button id="btn-house" class="btn btn-green">🏠 おうち</button>
+        <button id="btn-dress" class="btn btn-pink">👗 きせかえ</button>
+        <button id="btn-shop" class="btn btn-blue">🛒 ショップ</button>
+      </div>
+    </section>
+
+    <!-- コース選択 -->
+    <section id="screen-course" class="screen">
+      <header class="topbar">
+        <button class="icon-btn" data-home>◀</button>
+        <div class="points"><span class="coin">⭐</span><span class="points-value">0</span></div>
+      </header>
+      <h2 id="course-pack-title" class="heading"></h2>
+      <div id="pack-select" class="chip-row"></div>
+      <div class="panel">
+        <h3 class="panel-title">もんだいの かず</h3>
+        <div id="course-select" class="chip-row"></div>
+        <h3 class="panel-title">むずかしさ</h3>
+        <div id="level-select" class="chip-row"></div>
+        <p id="course-highscore" class="highscore"></p>
+      </div>
+      <div class="rule">
+        <p>💡 5もん れんぞくで ×2、10もんで ×3…と どんどん ふえるよ（上限なし！）</p>
+        <p>💡 むずかしいは ポイント 1.5ばい</p>
+        <p>💡 ぜんもん せいかいで その回の てんすうが ぜんぶ 2ばい！</p>
+      </div>
+      <button id="btn-start" class="btn btn-orange btn-huge">スタート！</button>
+    </section>
+
+    <!-- クイズ -->
+    <section id="screen-quiz" class="screen">
+      <header class="topbar">
+        <button id="btn-quit" class="icon-btn">✖</button>
+        <div id="quiz-progress" class="progress-text"></div>
+        <div id="quiz-score" class="quiz-score"></div>
+      </header>
+      <div class="progress"><div id="quiz-progress-bar" class="progress-bar"></div></div>
+      <div class="quiz-head">
+        <div id="quiz-chara" class="quiz-stage"></div>
+        <div id="quiz-combo" class="combo"></div>
+      </div>
+      <p id="quiz-prompt" class="prompt"></p>
+      <div id="quiz-text" class="sentence"></div>
+      <div id="quiz-choices" class="choices"></div>
+      <div id="quiz-feedback" class="feedback" hidden>
+        <div id="feedback-mark" class="feedback-mark"></div>
+        <div id="feedback-points" class="feedback-points"></div>
+        <p id="feedback-explain" class="feedback-explain"></p>
+        <button id="feedback-next" class="btn btn-orange">つぎへ</button>
+      </div>
+    </section>
+
+    <!-- クリア -->
+    <section id="screen-clear" class="screen">
+      <div id="clear-confetti" class="confetti-layer"></div>
+      <div class="clear-inner">
+        <h1 id="clear-title" class="clear-title">クリア！</h1>
+        <p id="clear-sub" class="clear-sub"></p>
+        <div id="clear-chara" class="clear-stage"></div>
+        <button id="btn-result" class="btn btn-orange btn-huge">けっかを みる</button>
+      </div>
+    </section>
+
+    <!-- 結果 -->
+    <section id="screen-result" class="screen">
+      <h2 class="heading">けっか</h2>
+      <p id="result-summary" class="result-summary"></p>
+      <div id="result-table" class="panel result-table"></div>
+      <p id="result-total" class="result-total"></p>
+      <p id="result-record" class="result-record" hidden>🎉 ハイスコア こうしん！</p>
+      <p id="result-points" class="result-points"></p>
+      <button id="btn-result-again" class="btn btn-orange btn-huge">もう いちど</button>
+      <div class="menu-grid two">
+        <button id="btn-result-shop" class="btn btn-blue">🛒 ショップ</button>
+        <button id="btn-result-home" class="btn btn-green">🏠 ホーム</button>
+      </div>
+    </section>
+
+    <!-- ショップ -->
+    <section id="screen-shop" class="screen">
+      <header class="topbar">
+        <button class="icon-btn" data-home>◀</button>
+        <h2 class="topbar-title">ショップ</h2>
+        <div class="points"><span class="coin">⭐</span><span class="points-value">0</span></div>
+      </header>
+      <div id="shop-tabs" class="tabs"></div>
+      <div id="shop-list" class="shop-list"></div>
+    </section>
+
+    <!-- おうち -->
+    <section id="screen-house" class="screen">
+      <header class="topbar">
+        <button class="icon-btn" data-home>◀</button>
+        <h2 id="house-name" class="topbar-title"></h2>
+        <div id="house-count" class="house-count"></div>
+      </header>
+      <div id="house-areas" class="tabs"></div>
+      <div id="room" class="room"></div>
+      <div class="house-tools">
+        <p class="hint">かぐを タップで えらんで、ゆびで うごかせるよ</p>
+        <button id="house-remove" class="btn btn-gray small" hidden>しまう</button>
+      </div>
+      <h3 class="panel-title">もっている かぐ</h3>
+      <div id="house-inventory" class="inventory"></div>
+    </section>
+
+    <!-- きせかえ -->
+    <section id="screen-dress" class="screen">
+      <header class="topbar">
+        <button class="icon-btn" data-home>◀</button>
+        <h2 class="topbar-title">きせかえ</h2>
+        <div class="points"><span class="coin">⭐</span><span class="points-value">0</span></div>
+      </header>
+      <div id="dress-charas" class="tabs"></div>
+      <div id="dress-stage" class="dress-stage"></div>
+      <button id="dress-partner" class="btn btn-pink small">あいぼうに する</button>
+      <div id="dress-slots" class="tabs"></div>
+      <div id="dress-items" class="inventory"></div>
+    </section>
+
+  </div>
+
+  <script src="js/storage.js"></script>
+  <script src="js/util.js"></script>
+  <script src="js/score.js"></script>
+  <script src="data/characters.js"></script>
+  <script src="data/shop.js"></script>
+  <script src="data/packs/index.js"></script>
+  <!-- 問題パックを追加するときは、ここに1行足す -->
+  <script src="data/packs/jutsugo.js"></script>
+  <script src="js/quiz.js"></script>
+  <script src="js/shop.js"></script>
+  <script src="js/house.js"></script>
+  <script src="js/dressup.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
