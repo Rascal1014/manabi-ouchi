@@ -1,5 +1,5 @@
 // ファイルを更新したら CACHE の番号を上げる
-const CACHE = "manabi-ouchi-v10";
+const CACHE = "manabi-ouchi-v11";
 
 const FILES = [
   "./",
@@ -41,7 +41,8 @@ const FILES = [
 ];
 
 self.addEventListener("install", (e) => {
-  e.waitUntil(caches.open(CACHE).then((c) => c.addAll(FILES)));
+  // ブラウザに のこっている 古いファイルを つかわないように、サーバーから とりなおす
+  e.waitUntil(caches.open(CACHE).then((c) => c.addAll(FILES.map((f) => new Request(f, { cache: "reload" })))));
   self.skipWaiting();
 });
 
@@ -56,7 +57,8 @@ self.addEventListener("activate", (e) => {
 self.addEventListener("fetch", (e) => {
   if (e.request.method !== "GET") return;
   e.respondWith(
-    fetch(e.request)
+    // GitHub Pages は 10分 ブラウザに 古いものを のこすので、毎回 新しいか たしかめてから つかう
+    fetch(e.request, { cache: "no-cache" })
       .then((res) => {
         const copy = res.clone();
         caches.open(CACHE).then((c) => c.put(e.request, copy));
