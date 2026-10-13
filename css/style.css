@@ -180,6 +180,18 @@ button {
 .btn-blue { background: var(--blue); }
 .btn-gray { background: var(--gray); }
 
+/* ホームの いちばん下の、目立たない「さいしょから」ボタン */
+.reset-link {
+  display: block;
+  margin: 18px auto 0;
+  padding: 6px 12px;
+  border: none;
+  background: none;
+  color: var(--brown-light);
+  font-size: 0.8rem;
+  text-decoration: underline;
+}
+
 .menu-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

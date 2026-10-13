@@ -64,6 +64,7 @@ const App = {
     on("#btn-result-shop", () => { Sound.tap(); Shop.open(); });
     on("#house-remove", () => House.removeSelected());
     on("#dress-partner", () => Dressup.makePartner());
+    on("#btn-reset", () => { Sound.tap(); this.confirmReset(); });
     on("#btn-sound", () => {
       Store.data.sound = !Store.data.sound;
       Store.save();
@@ -77,6 +78,36 @@ const App = {
 
   renderSoundButton() {
     $("#btn-sound").textContent = Store.data.sound ? "🔊" : "🔇";
+  },
+
+  // 子どもが まちがえて おしても 消えないように、2かい たしかめてから セーブを けす
+  confirmReset() {
+    showModal({
+      title: "さいしょから やりなおす？",
+      body: "ポイントも、かったものも、なかまも ぜんぶ きえちゃうよ。",
+      buttons: [
+        { label: "やめる", className: "btn-gray" },
+        {
+          label: "やりなおす",
+          onClick: () =>
+            showModal({
+              title: "ほんとうに いいの？",
+              body: "けしたら もとに もどせないよ。",
+              buttons: [
+                { label: "やめる", className: "btn-gray" },
+                {
+                  label: "ぜんぶ けす",
+                  className: "btn-pink",
+                  onClick: () => {
+                    Store.reset();
+                    this.openFirstSelect();
+                  },
+                },
+              ],
+            }),
+        },
+      ],
+    });
   },
 
   // ---------- さいしょの なかま選び ----------
