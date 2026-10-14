@@ -145,8 +145,9 @@ function fitWear(node, slot, w, f, back = false) {
     s.transform = "translate(-50%, -100%)";
   } else if (w.hold === "back") {
     // 前は かたひもを むねに、うしろは 本体を せなかの まん中に。大きさは 胴の幅に合わせる
-    s.width = f.bodyW * (back ? w.w : 0.75) + "%";
-    if (!back) s.height = "20%";
+    // 前の かたひもは、かたから うでの 内がわに そって 下りるように 胴の幅いっぱいに
+    s.width = f.bodyW * (back ? w.w : 1) + "%";
+    if (!back) s.height = "24%";
     s.left = f.bodyX + "%";
     s.top = f.neck + (back ? 0 : 1) + "%";
     s.transform = "translate(-50%, 0)";

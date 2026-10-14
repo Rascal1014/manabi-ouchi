@@ -51,6 +51,18 @@ const House = {
     } else {
       room.querySelectorAll(".placed").forEach((n) => n.remove());
     }
+    if (!room.dataset.furnitureFirst) {
+      room.dataset.furnitureFirst = "1";
+      // キャラと 家具が かさなったところを おしたら 家具を うごかす（家具どうしは 手前のもの）
+      room.addEventListener("pointerdown", (e) => {
+        if (!e.target.closest(".walker")) return;
+        const under = document.elementsFromPoint(e.clientX, e.clientY).find((n) => n.classList.contains("placed"));
+        if (!under) return;
+        e.stopPropagation();
+        e.preventDefault();
+        under.dispatchEvent(new PointerEvent("pointerdown", e));
+      }, true);
+    }
     room.className = `room area-${this.area}`;
     room.style.backgroundImage = `url("${house.rooms[this.area]}")`;
     const floor = this.floor(house);

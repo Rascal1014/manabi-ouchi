@@ -1,7 +1,7 @@
 const SAVE_KEY = "manabi-ouchi-v1";
 
 // お店から なくなった商品。古いセーブに のこっていたら 取りのぞく（ポイントは もどさない）
-const REMOVED_ITEMS = ["vest", "pouch", "phone", "clock", "fish", "game", "guitar", "fountain"];
+const REMOVED_ITEMS = ["vest", "pouch", "phone", "clock", "fish", "game", "guitar", "fountain", "flowerhair", "headphones"];
 
 const Store = {
   data: null,

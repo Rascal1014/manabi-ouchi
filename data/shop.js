@@ -64,7 +64,7 @@ const ITEMS = [
   { id: "umbrella", category: "furniture", name: "かさたて", icon: "☂️", price: 100, size: 11, image: "img/furniture/umbrella.webp" },
   { id: "mirror", category: "furniture", name: "かがみ", icon: "🪞", price: 100, size: 18, image: "img/furniture/mirror.webp" },
   { id: "bear", category: "furniture", name: "くまの ぬいぐるみ", icon: "🧸", price: 120, size: 10, image: "img/furniture/bear.webp" },
-  { id: "books", category: "furniture", name: "ほんだな", icon: "📚", price: 120, size: 20, image: "img/furniture/books.webp" },
+  { id: "books", category: "furniture", name: "ほんだな", icon: "📚", price: 120, size: 24, image: "img/furniture/books.webp" },
   { id: "table", category: "furniture", name: "テーブル", icon: "🍰", price: 120, size: 18, image: "img/furniture/table.webp" },
   { id: "radio", category: "furniture", name: "ラジオ", icon: "📻", price: 150, size: 9, image: "img/furniture/radio.webp" },
   { id: "tree", category: "furniture", name: "木", icon: "🌳", price: 150, size: 28, image: "img/furniture/tree.webp" },
@@ -72,9 +72,9 @@ const ITEMS = [
   { id: "painting", category: "furniture", name: "かいが", icon: "🖼️", price: 200, size: 13, image: "img/furniture/painting.webp" },
   { id: "tv", category: "furniture", name: "テレビ", icon: "📺", price: 300, size: 20, image: "img/furniture/tv.webp" },
   { id: "toilet", category: "furniture", name: "トイレ", icon: "🚽", price: 300, size: 14, image: "img/furniture/toilet.webp" },
-  { id: "pc", category: "furniture", name: "パソコン", icon: "💻", price: 400, size: 14, image: "img/furniture/pc.webp" },
+  { id: "pc", category: "furniture", name: "パソコン", icon: "💻", price: 400, size: 17, image: "img/furniture/pc.webp" },
   { id: "bed", category: "furniture", name: "てんがいつき ベッド", icon: "🛏️", price: 400, size: 26, image: "img/furniture/bed.webp" },
-  { id: "kotatsu", category: "furniture", name: "こたつ", icon: "🍵", price: 400, size: 22, image: "img/furniture/kotatsu.webp" },
+  { id: "kotatsu", category: "furniture", name: "こたつ", icon: "🍵", price: 400, size: 26, image: "img/furniture/kotatsu.webp" },
   { id: "bath", category: "furniture", name: "おふろ", icon: "🛁", price: 500, size: 22, image: "img/furniture/bath.webp" },
   { id: "tent", category: "furniture", name: "テント", icon: "⛺", price: 600, size: 28, image: "img/furniture/tent.webp" },
   { id: "piano", category: "furniture", name: "ピアノ", icon: "🎹", price: 800, size: 20, image: "img/furniture/piano.webp" },
@@ -128,7 +128,6 @@ const ITEMS = [
   // こもの（あたま）
   { id: "ribbon", category: "accessory", slot: "head", name: "リボン", icon: "🎀", price: 80, image: "img/items/ribbon.webp", wear: { w: 0.45, x: 0.32, y: 6 } },
   { id: "hachimaki", category: "accessory", slot: "head", name: "はちまき", icon: "🎌", price: 80, image: "img/items/hachimaki.webp", wear: { w: 1.0, y: 14 } },
-  { id: "flowerhair", category: "accessory", slot: "head", name: "はなかざり", icon: "🌸", price: 100, image: "img/items/flowerhair.webp", wear: { w: 0.85, y: 5 } },
   { id: "cap", category: "accessory", slot: "head", name: "キャップ", icon: "🧢", price: 150, image: "img/items/cap.webp", wear: { w: 1.1, y: 15 } },
   { id: "strawhat", category: "accessory", slot: "head", name: "むぎわらぼうし", icon: "👒", price: 200, image: "img/items/strawhat.webp", wear: { w: 1.6, y: 13 } },
   { id: "goggles", category: "accessory", slot: "head", name: "ゴーグル", icon: "🥽", price: 200, image: "img/items/goggles.webp", wear: { w: 0.95, y: 12 } },
@@ -140,7 +139,6 @@ const ITEMS = [
   { id: "crown", category: "accessory", slot: "head", name: "おうかん", icon: "👑", price: 1000, image: "img/items/crown.webp", wear: { w: 0.95, y: 9 } },
   { id: "tiara", category: "accessory", slot: "head", name: "ティアラ", icon: "💎", price: 300, image: "img/items/tiara_deluxe.webp", wear: { w: 0.85, y: 9 } },
   { id: "knit", category: "accessory", slot: "head", name: "ニットぼう", icon: "🧶", price: 150, image: "img/items/knit.webp", wear: { w: 1.0, y: 11 } },
-  { id: "headphones", category: "accessory", slot: "head", name: "ヘッドホン", icon: "🎧", price: 200, image: "img/items/headphones.webp", wear: { w: 1.45, y: 15 } },
   { id: "santa", category: "accessory", slot: "head", name: "サンタの ぼうし", icon: "🎅", price: 250, image: "img/items/santa.webp", wear: { w: 1.2, y: 11 } },
   { id: "pirate", category: "accessory", slot: "head", name: "かいぞくの ぼうし", icon: "🏴‍☠️", price: 300, image: "img/items/pirate.webp", wear: { w: 1.3, y: 10 } },
 ];
@@ -149,7 +147,7 @@ const ITEMS = [
 // （服は 着た絵 img/dressed/ に うしろ姿も あるので いらない）
 const BACK_IMAGES = [
   "nursecap", "policecap", "heroinebow", "ribbon", "cap", "strawhat", "tophat", "gradcap",
-  "hachimaki", "goggles", "witch", "deliverycap", "cacap", "veil", "santa", "knit", "headphones", "pirate",
+  "hachimaki", "goggles", "witch", "deliverycap", "cacap", "veil", "santa", "knit", "pirate",
 ];
 
 function backImageOf(image) {
