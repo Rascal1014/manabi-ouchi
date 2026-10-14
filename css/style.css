@@ -1198,8 +1198,11 @@ img.placed {
 }
 
 .inventory-name {
-  font-size: 0.68rem;
+  font-size: 0.72rem;
   font-weight: bold;
+  line-height: 1.25;
+  text-align: center;
+  max-width: 100%;
 }
 
 .inventory-empty {
