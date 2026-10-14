@@ -53,28 +53,28 @@ const FLOORS = {
 //           / pull（ひっぱる）/ both（りょう手で かかえる）
 const ITEMS = [
   // かぐ・かでん（画像は img/furniture/{id}.webp。size は 絵の 長いほうの辺）
-  { id: "flower", category: "furniture", name: "はなびん", icon: "💐", price: 50, size: 9, image: "img/furniture/flower.webp" },
-  { id: "pot_tulip", category: "furniture", name: "はちうえ（チューリップ）", icon: "🌷", price: 60, size: 9, image: "img/furniture/pot_tulip.webp" },
-  { id: "pot_rose", category: "furniture", name: "はちうえ（バラ）", icon: "🌹", price: 60, size: 9, image: "img/furniture/pot_rose.webp" },
-  { id: "pot_lily", category: "furniture", name: "はちうえ（すずらん）", icon: "🪻", price: 60, size: 9, image: "img/furniture/pot_lily.webp" },
+  { id: "flower", category: "furniture", name: "はなびん", icon: "💐", price: 50, size: 11, image: "img/furniture/flower.webp" },
+  { id: "pot_tulip", category: "furniture", name: "はちうえ（チューリップ）", icon: "🌷", price: 60, size: 11, image: "img/furniture/pot_tulip.webp" },
+  { id: "pot_rose", category: "furniture", name: "はちうえ（バラ）", icon: "🌹", price: 60, size: 11, image: "img/furniture/pot_rose.webp" },
+  { id: "pot_lily", category: "furniture", name: "はちうえ（すずらん）", icon: "🪻", price: 60, size: 11, image: "img/furniture/pot_lily.webp" },
   { id: "plant", category: "furniture", name: "かんようしょくぶつ", icon: "🪴", price: 60, size: 13, image: "img/furniture/plant.webp" },
-  { id: "chair", category: "furniture", name: "いす", icon: "🪑", price: 60, size: 13, image: "img/furniture/chair.webp" },
+  { id: "chair", category: "furniture", name: "いす", icon: "🪑", price: 60, size: 16, image: "img/furniture/chair.webp" },
   { id: "lamp", category: "furniture", name: "でんき", icon: "💡", price: 80, size: 15, image: "img/furniture/lamp.webp" },
-  { id: "sunflower", category: "furniture", name: "ひまわり", icon: "🌻", price: 80, size: 14, image: "img/furniture/sunflower.webp" },
+  { id: "sunflower", category: "furniture", name: "ひまわり", icon: "🌻", price: 80, size: 17, image: "img/furniture/sunflower.webp" },
   { id: "umbrella", category: "furniture", name: "かさたて", icon: "☂️", price: 100, size: 11, image: "img/furniture/umbrella.webp" },
-  { id: "mirror", category: "furniture", name: "かがみ", icon: "🪞", price: 100, size: 15, image: "img/furniture/mirror.webp" },
+  { id: "mirror", category: "furniture", name: "かがみ", icon: "🪞", price: 100, size: 18, image: "img/furniture/mirror.webp" },
   { id: "bear", category: "furniture", name: "くまの ぬいぐるみ", icon: "🧸", price: 120, size: 10, image: "img/furniture/bear.webp" },
-  { id: "books", category: "furniture", name: "ほんだな", icon: "📚", price: 120, size: 17, image: "img/furniture/books.webp" },
-  { id: "table", category: "furniture", name: "テーブル", icon: "🍰", price: 120, size: 15, image: "img/furniture/table.webp" },
+  { id: "books", category: "furniture", name: "ほんだな", icon: "📚", price: 120, size: 20, image: "img/furniture/books.webp" },
+  { id: "table", category: "furniture", name: "テーブル", icon: "🍰", price: 120, size: 18, image: "img/furniture/table.webp" },
   { id: "radio", category: "furniture", name: "ラジオ", icon: "📻", price: 150, size: 9, image: "img/furniture/radio.webp" },
   { id: "tree", category: "furniture", name: "木", icon: "🌳", price: 150, size: 28, image: "img/furniture/tree.webp" },
   { id: "sofa", category: "furniture", name: "ソファ", icon: "🛋️", price: 200, size: 24, image: "img/furniture/sofa.webp" },
   { id: "painting", category: "furniture", name: "かいが", icon: "🖼️", price: 200, size: 13, image: "img/furniture/painting.webp" },
-  { id: "tv", category: "furniture", name: "テレビ", icon: "📺", price: 300, size: 17, image: "img/furniture/tv.webp" },
+  { id: "tv", category: "furniture", name: "テレビ", icon: "📺", price: 300, size: 20, image: "img/furniture/tv.webp" },
   { id: "toilet", category: "furniture", name: "トイレ", icon: "🚽", price: 300, size: 14, image: "img/furniture/toilet.webp" },
   { id: "pc", category: "furniture", name: "パソコン", icon: "💻", price: 400, size: 14, image: "img/furniture/pc.webp" },
   { id: "bed", category: "furniture", name: "てんがいつき ベッド", icon: "🛏️", price: 400, size: 26, image: "img/furniture/bed.webp" },
-  { id: "kotatsu", category: "furniture", name: "こたつ", icon: "🍵", price: 400, size: 18, image: "img/furniture/kotatsu.webp" },
+  { id: "kotatsu", category: "furniture", name: "こたつ", icon: "🍵", price: 400, size: 22, image: "img/furniture/kotatsu.webp" },
   { id: "bath", category: "furniture", name: "おふろ", icon: "🛁", price: 500, size: 22, image: "img/furniture/bath.webp" },
   { id: "tent", category: "furniture", name: "テント", icon: "⛺", price: 600, size: 28, image: "img/furniture/tent.webp" },
   { id: "piano", category: "furniture", name: "ピアノ", icon: "🎹", price: 800, size: 20, image: "img/furniture/piano.webp" },
@@ -110,18 +110,20 @@ const ITEMS = [
 
   // アクセサリ（もつもの）
   { id: "basket", category: "accessory", slot: "bag", name: "かご", icon: "🧺", price: 120, image: "img/items/basket.webp", wear: { hold: "hand", w: 30, ay: 0.08 } },
-  { id: "tote", category: "accessory", slot: "bag", name: "トートバッグ", icon: "👜", price: 120, image: "img/items/tote.webp", wear: { hold: "shoulder", w: 30 } },
-  { id: "handbag", category: "accessory", slot: "bag", name: "ハンドバッグ", icon: "👛", price: 150, image: "img/items/handbag.webp", wear: { hold: "hand", w: 26, ay: 0.05 } },
+  { id: "tote", category: "accessory", slot: "bag", name: "トートバッグ", icon: "👜", price: 120, image: "img/items/tote.webp", wear: { hold: "shoulder", w: 30, side: "img/items/tote_side.webp" } },
+  { id: "handbag", category: "accessory", slot: "bag", name: "ハンドバッグ", icon: "👛", price: 150, image: "img/items/handbag.webp", wear: { hold: "hand", w: 26, ay: 0.05, side: "img/items/handbag_side.webp" } },
   { id: "present", category: "accessory", slot: "bag", name: "プレゼント", icon: "🎁", price: 150, image: "img/items/present.webp", wear: { hold: "both", w: 42 } },
   { id: "hammer", category: "accessory", slot: "bag", name: "ピコピコハンマー", icon: "🔨", price: 180, image: "img/items/hammer.webp", wear: { hold: "hand", w: 26, ay: 0.85 } },
-  { id: "backpack", category: "accessory", slot: "bag", name: "リュック", icon: "🎒", price: 200, image: "img/items/backpack.webp", wear: { hold: "back", w: 50, front: "img/items/backpack_straps.webp" } },
+  { id: "backpack", category: "accessory", slot: "bag", name: "ランドセル", icon: "🎒", price: 200, image: "img/items/backpack.webp", wear: { hold: "back", w: 1.2, front: "img/items/backpack_straps.webp" } },
   { id: "parasol", category: "accessory", slot: "bag", name: "ひがさ", icon: "⛱️", price: 200, image: "img/items/parasol.webp", wear: { hold: "hand", w: 50, ax: 0.42, ay: 0.92, behind: true } },
-  { id: "briefcase", category: "accessory", slot: "bag", name: "かばん", icon: "💼", price: 250, image: "img/items/briefcase.webp", wear: { hold: "hand", w: 30, ay: 0.05 } },
-  { id: "boston", category: "accessory", slot: "bag", name: "ボストンバッグ", icon: "👜", price: 250, image: "img/items/boston.webp", wear: { hold: "hand", w: 34, ay: 0.05 } },
-  { id: "carry", category: "accessory", slot: "bag", name: "キャリーバッグ", icon: "🧳", price: 300, image: "img/items/carry.webp", wear: { hold: "pull", w: 30, ay: 0.03 } },
-  { id: "hiking", category: "accessory", slot: "bag", name: "とざんの リュック", icon: "🏔️", price: 350, image: "img/items/hiking.webp", wear: { hold: "back", w: 52, front: "img/items/hiking_straps.webp" } },
-  { id: "stick", category: "accessory", slot: "bag", name: "まほうの ステッキ", icon: "🪄", price: 600, image: "img/items/stick.webp", wear: { hold: "hand", w: 22, ay: 0.8 } },
-  { id: "sword", category: "accessory", slot: "bag", name: "せいけん", icon: "🗡️", price: 1000, image: "img/items/sword.webp", wear: { hold: "hand", w: 27, ay: 0.82 } },
+  { id: "briefcase", category: "accessory", slot: "bag", name: "かばん", icon: "💼", price: 250, image: "img/items/briefcase.webp", wear: { hold: "hand", w: 30, ay: 0.05, side: "img/items/briefcase_side.webp" } },
+  { id: "boston", category: "accessory", slot: "bag", name: "ボストンバッグ", icon: "👜", price: 250, image: "img/items/boston.webp", wear: { hold: "hand", w: 30, ay: 0.05, side: "img/items/boston_side.webp" } },
+  { id: "carry", category: "accessory", slot: "bag", name: "キャリーバッグ", icon: "🧳", price: 300, image: "img/items/carry.webp", wear: { hold: "pull", w: 30, ay: 0.03, side: "img/items/carry_side.webp" } },
+  { id: "hiking", category: "accessory", slot: "bag", name: "とざんの リュック", icon: "🏔️", price: 350, image: "img/items/hiking.webp", wear: { hold: "back", w: 1.12, front: "img/items/hiking_straps.webp" } },
+  { id: "stick", category: "accessory", slot: "bag", name: "まほうの ステッキ", icon: "🪄", price: 600, image: "img/items/stick.webp", wear: { hold: "hand", w: 26, ax: 0.3, ay: 0.72, side: "img/items/stick_side.webp" } },
+  { id: "angelwings", category: "accessory", slot: "bag", name: "てんしの はね", icon: "🪽", price: 500, image: "img/items/angelwings.webp", wear: { hold: "wings", w: 2.4 } },
+  { id: "devilwings", category: "accessory", slot: "bag", name: "あくまの はね", icon: "🦇", price: 500, image: "img/items/devilwings.webp", wear: { hold: "wings", w: 2.4 } },
+  { id: "sword", category: "accessory", slot: "bag", name: "せいけん", icon: "🗡️", price: 1000, image: "img/items/sword.webp", wear: { hold: "hand", w: 36, ax: 0.2, ay: 0.82, side: "img/items/sword_side.webp" } },
 
   // こもの（あたま）
   { id: "ribbon", category: "accessory", slot: "head", name: "リボン", icon: "🎀", price: 80, image: "img/items/ribbon.webp", wear: { w: 0.45, x: 0.32, y: 6 } },
@@ -135,14 +137,19 @@ const ITEMS = [
   { id: "horns", category: "accessory", slot: "head", name: "あくまの つの", icon: "😈", price: 300, image: "img/items/horns.webp", wear: { w: 0.8, y: 5 } },
   { id: "gradcap", category: "accessory", slot: "head", name: "はかせぼう", icon: "🎓", price: 400, image: "img/items/gradcap.webp", wear: { w: 1.25, y: 12 } },
   { id: "witch", category: "accessory", slot: "head", name: "まじょの ぼうし", icon: "🧙", price: 400, image: "img/items/witch.webp", wear: { w: 1.15, y: 10 } },
-  { id: "crown", category: "accessory", slot: "head", name: "おうかん", icon: "👑", price: 1000, image: "img/items/crown.webp", wear: { w: 0.55, y: 3 } },
+  { id: "crown", category: "accessory", slot: "head", name: "おうかん", icon: "👑", price: 1000, image: "img/items/crown.webp", wear: { w: 0.95, y: 9 } },
+  { id: "tiara", category: "accessory", slot: "head", name: "ティアラ", icon: "💎", price: 300, image: "img/items/tiara_deluxe.webp", wear: { w: 0.85, y: 9 } },
+  { id: "knit", category: "accessory", slot: "head", name: "ニットぼう", icon: "🧶", price: 150, image: "img/items/knit.webp", wear: { w: 1.0, y: 11 } },
+  { id: "headphones", category: "accessory", slot: "head", name: "ヘッドホン", icon: "🎧", price: 200, image: "img/items/headphones.webp", wear: { w: 1.45, y: 15 } },
+  { id: "santa", category: "accessory", slot: "head", name: "サンタの ぼうし", icon: "🎅", price: 250, image: "img/items/santa.webp", wear: { w: 1.2, y: 11 } },
+  { id: "pirate", category: "accessory", slot: "head", name: "かいぞくの ぼうし", icon: "🏴‍☠️", price: 300, image: "img/items/pirate.webp", wear: { w: 1.3, y: 10 } },
 ];
 
 // 後ろ姿用の画像（img/items/{名前}_back.webp）がある ぼうし類。ないものは後ろ姿でも前の画像を使う
 // （服は 着た絵 img/dressed/ に うしろ姿も あるので いらない）
 const BACK_IMAGES = [
   "nursecap", "policecap", "heroinebow", "ribbon", "cap", "strawhat", "tophat", "gradcap",
-  "hachimaki", "goggles", "witch", "deliverycap", "cacap", "veil",
+  "hachimaki", "goggles", "witch", "deliverycap", "cacap", "veil", "santa", "knit", "headphones", "pirate",
 ];
 
 function backImageOf(image) {

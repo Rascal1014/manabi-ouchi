@@ -90,8 +90,9 @@ function setCharacterMood(wrap, mood) {
 // きせかえを重ねる。画像の服は「着た絵」をキャラ本体の絵にするので、ここでは バッグと あたまの こものだけ重ねる
 function addWear(wrap, charId, mood) {
   wrap.querySelectorAll(".wear").forEach((n) => n.remove());
-  const fit = getCharacter(charId).fit;
-  const f = fit && (fit[mood] || fit.normal);
+  const chara = getCharacter(charId);
+  const fit = chara.fit;
+  const f = fit && { ...(fit[mood] || fit.normal), hatScale: chara.hatScale || 1 };
   const outfit = Store.data.outfits[charId] || {};
   const get = (slot) => outfit[slot] && getItem(outfit[slot]);
   const clothes = get("clothes");
@@ -108,10 +109,13 @@ function addWear(wrap, charId, mood) {
   const hold = bag && bag.wear && bag.wear.hold;
   // りょう手で かかえる ものは、うしろ姿では 体に かくれて 見えない
   if (bag && !(back && hold === "both")) {
-    // せおう ものは、前からは かたひもだけ、うしろからは 本体を 見せる
-    const shown = hold === "back" && !back ? { ...bag, image: bag.wear.front } : bag;
-    // 日傘のように 顔に かぶる ものは、前から見たとき 体の うしろに まわす
-    const behind = bag.wear && bag.wear.behind && !back ? " wear-behind" : "";
+    // せおう ものは、前からは かたひもだけ、うしろからは 本体を 見せる。
+    // 手に もつ ものは、ななめから見た絵（side）が あれば それを使う
+    let shown = bag;
+    if (hold === "back" && !back) shown = { ...bag, image: bag.wear.front };
+    else if (bag.wear && bag.wear.side) shown = { ...bag, image: bag.wear.side };
+    // 日傘のように 顔に かぶる ものや はねは、前から見たとき 体の うしろに まわす
+    const behind = bag.wear && (bag.wear.behind || hold === "wings") && !back ? " wear-behind" : "";
     const node = renderItemVisual(shown, `wear wear-bag mood-${mood}${behind}`);
     fitWear(node, "bag", bag.image && bag.wear, f, back);
     wrap.appendChild(node);
@@ -132,18 +136,26 @@ function fitWear(node, slot, w, f, back = false) {
   if (!w || !f) return;
   const s = node.style;
   if (slot === "head") {
-    s.width = f.headW * w.w + "%";
+    // 頭の大きさに対して、キャラごとに ぼうしの大きさを ちょうせいする（hatScale）
+    const hs = w.noScale ? 1 : f.hatScale || 1;
+    s.width = f.headW * w.w * hs + "%";
     // かたよせて つける リボンなどは、うしろから見ると 左右が 逆になる
     s.left = f.headX + (w.x || 0) * (back ? -1 : 1) * f.headW + "%";
-    s.top = f.headTop + (w.y || 0) + "%";
+    s.top = f.headTop + (w.y || 0) * hs + "%";
     s.transform = "translate(-50%, -100%)";
   } else if (w.hold === "back") {
-    // 前は かたひもを むねに、うしろは 本体を せなかの まん中に
-    s.width = (back ? w.w : f.bodyW * 0.8) + "%";
-    if (!back) s.height = "22%";
+    // 前は かたひもを むねに、うしろは 本体を せなかの まん中に。大きさは 胴の幅に合わせる
+    s.width = f.bodyW * (back ? w.w : 0.75) + "%";
+    if (!back) s.height = "20%";
     s.left = f.bodyX + "%";
-    s.top = f.neck - (back ? 3 : 1) + "%";
+    s.top = f.neck + (back ? 0 : 1) + "%";
     s.transform = "translate(-50%, 0)";
+  } else if (w.hold === "wings") {
+    // せなかの 首の すこし下に、はねの まん中を あわせる
+    s.width = f.bodyW * w.w + "%";
+    s.left = f.bodyX + "%";
+    s.top = f.neck + (w.y ?? 8) + "%";
+    s.transform = "translate(-50%, -50%)";
   } else if (w.hold === "both") {
     s.width = w.w + "%";
     s.left = f.bodyX + "%";

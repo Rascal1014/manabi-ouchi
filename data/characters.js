@@ -1,4 +1,5 @@
 // 画像は img/characters/{id}_{normal|happy|cry}.webp（背景を透明にしたもの）
+// hatScale: 頭の こものの 大きさの ちょうせい（頭の絵の幅に 耳などが入るキャラは 小さめにする）
 // fit: きせかえを体に合わせる位置。画像の幅・高さに対する %。表情ごとにポーズがちがうので別々に持つ。
 //   neck: 首（服のえり）の高さ / bodyX・bodyW: 胴の中心と幅
 //   headX・headTop・headW: 頭の中心・てっぺん・幅 / handX・handY: 絵の右がわの手の位置（アクセサリを持つ）
@@ -9,7 +10,7 @@ const CHARACTERS = [
     animal: "いぬ",
     profile: "くるくるの けが じまんの トイプードル。みんなと あそぶのが 大すき。",
     fit: {
-      normal: { neck: 41, bodyX: 51, bodyW: 43, headX: 50, headTop: 9, headW: 41, handX: 86, handY: 47 },
+      normal: { neck: 41, bodyX: 51, bodyW: 43, headX: 50, headTop: 9, headW: 41, handX: 78, handY: 67 },
       happy: { neck: 41, bodyX: 49, bodyW: 38, headX: 50, headTop: 11, headW: 41, handX: 84, handY: 30 },
       cry: { neck: 44, bodyX: 51, bodyW: 42, headX: 51, headTop: 9, headW: 42, handX: 78, handY: 68 },
       walkf1: { neck: 40, bodyX: 51, bodyW: 36, headX: 54, headTop: 9, headW: 37, handX: 85, handY: 56 },
@@ -25,6 +26,7 @@ const CHARACTERS = [
     name: "リボンちゃん",
     animal: "ねこ",
     profile: "オレンジの リボンが おきにいりの ねこ。おしゃれが 大すき。",
+    hatScale: 0.8,
     fit: {
       normal: { neck: 45, bodyX: 50, bodyW: 39, headX: 50, headTop: 13, headW: 50, handX: 78, handY: 67 },
       happy: { neck: 43, bodyX: 49, bodyW: 34, headX: 51, headTop: 14, headW: 48, handX: 84, handY: 34 },
@@ -42,6 +44,7 @@ const CHARACTERS = [
     name: "ポムちゃん",
     animal: "たぬき",
     profile: "あたまの はっぱが じまんの たぬき。のんびり おひるねが 大すき。",
+    hatScale: 0.75,
     fit: {
       normal: { neck: 51, bodyX: 50, bodyW: 45, headX: 50, headTop: 17, headW: 56, handX: 76, handY: 66 },
       happy: { neck: 47, bodyX: 48, bodyW: 39, headX: 50, headTop: 17, headW: 50, handX: 82, handY: 38 },
@@ -91,6 +94,7 @@ const SPECIAL_ARTS = [
   { image: "img/special/sp6.webp", title: "おまつりで わっしょい！" },
   { image: "img/special/sp7.webp", title: "おやすみなさい（ポムちゃん ねぞう わるい…）" },
   { image: "img/special/sp8.webp", title: "がっこうで おべんきょう" },
+  { image: "img/special/sp9.webp", title: "3人で へんしん！" },
 ];
 
 function charImg(id, mood = "normal") {

@@ -291,12 +291,18 @@ const Quiz = {
     confetti(fx, perfect ? 140 : 80);
     App.show("clear");
     Sound.fanfare();
+    // パーフェクトのときは、ごほうびの絵を とじるまで 「けっかを みる」を かくす（先に おして とばさないように）
+    this.setResultButton(!perfect);
     if (perfect) setTimeout(() => this.showSpecial(), 1400);
+  },
+
+  setResultButton(visible) {
+    $("#btn-result").style.visibility = visible ? "" : "hidden";
   },
 
   // パーフェクトの ごほうび。3人の とくべつな絵を 画面いっぱいに出す
   showSpecial() {
-    if (document.body.dataset.screen !== "clear") return;
+    if (document.body.dataset.screen !== "clear") return this.setResultButton(true);
     const art = this.special;
     const overlay = el("div", "special-art");
     const frame = el("div", "special-frame");
@@ -311,6 +317,11 @@ const Quiz = {
       Sound.tap();
       overlay.classList.add("closing");
       setTimeout(() => overlay.remove(), 300);
+      this.setResultButton(true);
+    };
+    img.onerror = () => {
+      overlay.remove();
+      this.setResultButton(true);
     };
     document.body.appendChild(overlay);
     Sound.combo();

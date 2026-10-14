@@ -1245,6 +1245,59 @@ img.placed {
   width: 55%;
 }
 
+/* あいぼうボタンは キャラの 左上に のせて、下の アイテムを 多く見せる */
+.dress-stage-wrap {
+  position: relative;
+}
+
+.dress-stage-wrap #dress-partner {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  padding: 6px 10px;
+  font-size: 0.8rem;
+  z-index: 3;
+}
+
+@media (max-width: 600px) {
+  .shop-list {
+    gap: 8px;
+  }
+
+  .shop-card {
+    padding: 6px;
+    gap: 2px;
+  }
+
+  .shop-visual,
+  .shop-visual img.item-visual {
+    height: 52px;
+  }
+
+  .shop-visual .item-visual {
+    font-size: 40px;
+  }
+
+  .shop-visual img.house-thumb,
+  .shop-card:has(.house-thumb) .shop-visual {
+    height: 72px;
+  }
+
+  .shop-name {
+    font-size: 0.85rem;
+  }
+
+  .shop-note,
+  .shop-lack {
+    font-size: 0.7rem;
+  }
+
+  .shop-buy {
+    padding: 5px;
+    font-size: 0.9rem;
+  }
+}
+
 /* ---------- モーダル・トースト ---------- */
 .modal-overlay {
   position: fixed;
