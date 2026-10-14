@@ -25,7 +25,7 @@ const House = {
     const areas = Object.keys(house.rooms);
     tabs.hidden = areas.length < 2;
     areas.forEach((a) => {
-      const b = el("button", "tab" + (a === this.area ? " active" : ""), AREA_NAMES[a]);
+      const b = el("button", "tab" + (a === this.area ? " active" : ""), areaName(house, a));
       b.onclick = () => {
         Sound.tap();
         this.area = a;
@@ -69,10 +69,13 @@ const House = {
 
     if (!this.walkers.length) {
       const ids = Store.data.characters;
+      const box = this.walkerBox(floor);
       ids.forEach((id, i) => {
         // 横にばらけるように、最初は床を等分した位置から歩きはじめる
-        const x = floor.left + ((i + 0.5) / ids.length) * (floor.right - floor.left);
-        const y = floor.top + (0.45 + Math.random() * 0.4) * (floor.bottom - floor.top);
+        const x = box.left + ((i + 0.5) / ids.length) * (box.right - box.left);
+        let y = box.top + (0.45 + Math.random() * 0.4) * (box.bottom - box.top);
+        if (this.blocked(floor, x, y)) y = floor.avoid.bottom;
+        y = Math.max(box.top, Math.min(box.bottom, y));
         const w = this.makeWalker(id, x, y, i);
         this.walkers.push(w);
         room.appendChild(w.node);
@@ -85,6 +88,44 @@ const House = {
 
   floor(house) {
     return FLOORS[house.rooms[this.area]] || { left: 12, right: 88, top: 55, bottom: 95 };
+  },
+
+  // 体の横はみ出しで部屋のふちが切れないように、歩く範囲を床の内側に寄せる
+  walkerBox(floor) {
+    const padX = 14;
+    const left = Math.max(floor.left, padX);
+    const right = Math.min(floor.right, 100 - padX);
+    return {
+      left: Math.min(left, right - 4),
+      right: Math.max(right, left + 4),
+      top: floor.top,
+      bottom: Math.min(floor.bottom, 96),
+    };
+  },
+
+  // 水面など、足を置いてはいけない範囲
+  blocked(floor, x, y) {
+    const a = floor.avoid;
+    return !!(a && x >= a.left && x <= a.right && y >= a.top && y < a.bottom);
+  },
+
+  randomPoint(floor, area) {
+    for (let i = 0; i < 30; i++) {
+      const x = area.left + Math.random() * (area.right - area.left);
+      const y = area.top + Math.random() * (area.bottom - area.top);
+      if (!this.blocked(floor, x, y)) return { x, y };
+    }
+    return {
+      x: (area.left + area.right) / 2,
+      y: Math.min(area.bottom - 1, floor.avoid ? floor.avoid.bottom : area.bottom - 1),
+    };
+  },
+
+  clampToFloor(floor, x, y) {
+    x = Math.max(floor.left, Math.min(floor.right, x));
+    y = Math.max(floor.top, Math.min(floor.bottom, y));
+    if (this.blocked(floor, x, y)) y = Math.min(floor.bottom, floor.avoid.bottom);
+    return { x, y };
   },
 
   // 奥（床の上のほう）ほど小さく、手前ほど大きく見せる
@@ -171,8 +212,9 @@ const House = {
     if (w.state === "idle") {
       w.wait -= dt;
       if (w.wait <= 0) {
-        w.tx = floor.left + Math.random() * (floor.right - floor.left);
-        w.ty = floor.top + Math.random() * (floor.bottom - floor.top);
+        const spot = this.randomPoint(floor, this.walkerBox(floor));
+        w.tx = spot.x;
+        w.ty = spot.y;
         w.state = "walk";
         w.beat = 0;
         w.beatDist = 0;
@@ -300,9 +342,13 @@ const House = {
     Sound.tap();
     const uid = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
     const f = this.floor(house);
-    const x = f.left + Math.random() * (f.right - f.left);
-    const y = f.top + 4 + Math.random() * (f.bottom - f.top - 14);
-    Store.data.placements.push({ uid, item: item.id, area: this.area, x, y });
+    const spot = this.randomPoint(f, {
+      left: f.left,
+      right: f.right,
+      top: f.top + 4,
+      bottom: Math.max(f.top + 8, f.bottom - 4),
+    });
+    Store.data.placements.push({ uid, item: item.id, area: this.area, x: spot.x, y: spot.y });
     Store.save();
     this.selected = uid;
     this.render();
@@ -330,10 +376,12 @@ const House = {
       const onMove = (ev) => {
         if (Math.abs(ev.clientX - startX) + Math.abs(ev.clientY - startY) > 6) moved = true;
         if (!moved) return;
-        const x = ((ev.clientX - rect.left) / rect.width) * 100;
-        const y = ((ev.clientY - rect.top) / rect.height) * 100;
-        placement.x = Math.max(0, Math.min(100, x));
-        placement.y = Math.max(0, Math.min(100, y));
+        const rawX = ((ev.clientX - rect.left) / rect.width) * 100;
+        const rawY = ((ev.clientY - rect.top) / rect.height) * 100;
+        // プールの水面や壁の上には置かず、歩ける床の中に収める
+        const spot = this.clampToFloor(floor, rawX, rawY);
+        placement.x = spot.x;
+        placement.y = spot.y;
         this.placeFurniture(node, placement, floor);
         node.style.zIndex = 200;
       };

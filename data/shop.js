@@ -25,10 +25,16 @@ const HOUSES = [
     id: "pool", name: "プールつき", price: 6000, maxItems: 34,
     image: "img/houses/pool.png",
     rooms: { "1f": "img/rooms/house2_1f.jpg", "2f": "img/rooms/house2_2f.jpg", garden: "img/rooms/pool.jpg" },
+    // にわの場所がプールの写真になるので、タブの名前だけ変える
+    areaNames: { garden: "プール" },
   },
 ];
 
 const AREA_NAMES = { "1f": "1かい", "2f": "2かい", garden: "にわ" };
+
+function areaName(house, area) {
+  return (house.areaNames && house.areaNames[area]) || AREA_NAMES[area] || area;
+}
 
 // 背景ごとの、キャラが歩ける床の範囲（足もとの位置。部屋の幅・高さに対する %）
 const FLOORS = {
@@ -37,7 +43,11 @@ const FLOORS = {
   "img/rooms/house2_1f.jpg": { left: 10, right: 82, top: 54, bottom: 95 },
   "img/rooms/house2_2f.jpg": { left: 12, right: 88, top: 56, bottom: 95 },
   "img/rooms/garden.jpg": { left: 14, right: 86, top: 42, bottom: 84 },
-  "img/rooms/pool.jpg": { left: 10, right: 90, top: 64, bottom: 95 },
+  // avoid: 右側の水面。足がここに入ると体が水に重なる
+  "img/rooms/pool.jpg": {
+    left: 12, right: 88, top: 62, bottom: 94,
+    avoid: { left: 46, right: 100, top: 0, bottom: 86 },
+  },
 };
 
 // category: furniture（かぐ・かでん） / clothes（ようふく） / accessory（こもの）
@@ -52,7 +62,7 @@ const FLOORS = {
 const ITEMS = [
   // かぐ・かでん
   { id: "flower", category: "furniture", name: "はなびん", icon: "💐", price: 50, size: 8 },
-  { id: "plant", category: "furniture", name: "かんようしょくぶつ", icon: "🪴", price: 60, size: 12 },
+  { id: "plant", category: "furniture", name: "はちうえ", icon: "🪴", price: 60, size: 12 },
   { id: "chair", category: "furniture", name: "いす", icon: "🪑", price: 60, size: 13 },
   { id: "lamp", category: "furniture", name: "でんき", icon: "💡", price: 80, size: 11 },
   { id: "phone", category: "furniture", name: "でんわ", icon: "☎️", price: 90, size: 7 },
