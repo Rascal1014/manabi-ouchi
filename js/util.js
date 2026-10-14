@@ -105,10 +105,13 @@ function addWear(wrap, charId, mood) {
   }
 
   const bag = get("bag");
-  if (bag) {
-    const node = renderItemVisual(view(bag), `wear wear-bag mood-${mood}`);
-    // リュックは うしろ姿では 背中の まん中に せおう
-    fitWear(node, back && bag.id === "backpack" ? "backpack" : "bag", bag.image && bag.wear, f, back);
+  const hold = bag && bag.wear && bag.wear.hold;
+  // りょう手で かかえる ものは、うしろ姿では 体に かくれて 見えない
+  if (bag && !(back && hold === "both")) {
+    // せおう ものは、前からは かたひもだけ、うしろからは 本体を 見せる
+    const shown = hold === "back" && !back ? { ...bag, image: bag.wear.front } : bag;
+    const node = renderItemVisual(shown, `wear wear-bag mood-${mood}`);
+    fitWear(node, "bag", bag.image && bag.wear, f, back);
     wrap.appendChild(node);
   }
 
@@ -132,16 +135,30 @@ function fitWear(node, slot, w, f, back = false) {
     s.left = f.headX + (w.x || 0) * (back ? -1 : 1) * f.headW + "%";
     s.top = f.headTop + (w.y || 0) + "%";
     s.transform = "translate(-50%, -100%)";
-  } else if (slot === "backpack") {
-    s.width = w.w * 1.1 + "%";
+  } else if (w.hold === "back") {
+    // 前は かたひもを むねに、うしろは 本体を せなかの まん中に
+    s.width = (back ? w.w : f.bodyW * 0.8) + "%";
+    if (!back) s.height = "22%";
     s.left = f.bodyX + "%";
-    s.top = f.neck + f.bodyW * 0.35 + "%";
-    s.transform = "translate(-50%, -50%)";
-  } else {
+    s.top = f.neck - (back ? 3 : 1) + "%";
+    s.transform = "translate(-50%, 0)";
+  } else if (w.hold === "both") {
     s.width = w.w + "%";
-    s.left = f.bagX + "%";
-    s.top = f.bagY + "%";
+    s.left = f.bodyX + "%";
+    s.top = f.neck + 14 + "%";
     s.transform = "translate(-50%, -50%)";
+  } else if (w.hold === "shoulder") {
+    // かたひもの上のはしを かたに かけて、体の よこに さげる
+    s.width = w.w + "%";
+    s.left = f.bodyX + f.bodyW * 0.38 + "%";
+    s.top = f.neck + 1 + "%";
+    s.transform = "translate(-50%, 0)";
+  } else {
+    // hand・pull: 絵の (ax, ay) の ところを 手の位置に あわせる
+    s.width = w.w + "%";
+    s.left = f.handX + "%";
+    s.top = f.handY + "%";
+    s.transform = `translate(${-(w.ax ?? 0.5) * 100}%, ${-(w.ay ?? 0.1) * 100}%)`;
   }
 }
 

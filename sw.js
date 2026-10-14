@@ -1,5 +1,5 @@
 // ファイルを更新したら CACHE の番号を上げる
-const CACHE = "manabi-ouchi-v11";
+const CACHE = "manabi-ouchi-v13";
 
 const FILES = [
   "./",
@@ -18,26 +18,15 @@ const FILES = [
   "data/shop.js",
   "data/packs/index.js",
   "data/packs/jutsugo.js",
-  "img/title.jpg",
-  ...["oneroom", "house1", "house2_1f", "house2_2f", "garden", "pool"].map((n) => `img/rooms/${n}.jpg`),
-  ...["oneroom", "house1", "house2", "garden", "pool"].map((n) => `img/houses/${n}.png`),
+  "img/icon-192.png",
+  "img/title.webp",
+  "img/rooms/oneroom.webp",
   ...["haro", "ribbon", "pom"].flatMap((id) =>
     ["normal", "happy", "cry", "walkf1", "walkf2", "walkf3", "walkb1", "walkb2", "walkb3"].map(
-      (m) => `img/characters/${id}_${m}.png`
+      (m) => `img/characters/${id}_${m}.webp`
     )
   ),
-  ...[
-    "tshirt", "blouse", "vest", "dress", "swim", "coat", "dogi", "kimono",
-    "ribbon", "flowerhair", "cap", "strawhat", "tophat", "gradcap", "crown",
-    "pouch", "basket", "handbag", "backpack", "briefcase",
-    "nurse", "police", "princess", "heroine", "robot",
-    "nursecap", "policecap", "tiara", "heroinebow", "robothead",
-  ].map((n) => `img/items/${n}.png`),
-  // 服を着た絵（img/dressed/）は 数が多いので 先には入れず、使ったときに 保存する
-  ...["nursecap", "policecap", "heroinebow", "ribbon", "cap", "strawhat", "tophat", "gradcap"].map(
-    (n) => `img/items/${n}_back.png`
-  ),
-  ...[1, 2, 3, 4, 5, 6, 7, 8].map((n) => `img/special/sp${n}.jpg`),
+  // ほかの画像（家・こもの・服を着た絵・ご褒美など）は 先には入れず、使ったときに 保存する
 ];
 
 self.addEventListener("install", (e) => {

@@ -12,22 +12,21 @@ const App = {
     this.preloadImages();
   },
 
-  // 画面を切りかえたときに背景がすぐ出るように、先に読みこんでおく
+  // 画面を切りかえたときに絵がすぐ出るように、今 使うものだけ 先に読みこんでおく
+  // （ショップの商品などは、ひらいたときに読みこむ）
   preloadImages() {
     const urls = new Set();
-    HOUSES.forEach((h) => {
-      urls.add(h.image);
-      Object.values(h.rooms).forEach((u) => urls.add(u));
+    const house = HOUSES.find((h) => h.id === Store.data.house);
+    if (house) Object.values(house.rooms).forEach((u) => urls.add(u));
+    Store.data.characters.forEach((id) => {
+      ["normal", "happy", "cry", ...WALK_POSES].forEach((m) => urls.add(charImg(id, m)));
+      const clothes = wornClothes(id);
+      if (clothes) DRESSED_POSES.forEach((m) => urls.add(dressedImg(id, clothes.id, m)));
     });
-    CHARACTERS.forEach((c) => {
-      ["normal", "happy", "cry", ...WALK_POSES].forEach((m) => urls.add(charImg(c.id, m)));
-      // 着た絵は 全部だと多いので、今 着ている服の ぶんだけ
-      const clothes = Store.data.characters.includes(c.id) && wornClothes(c.id);
-      if (clothes) DRESSED_POSES.forEach((m) => urls.add(dressedImg(c.id, clothes.id, m)));
-    });
-    ITEMS.forEach((i) => {
+    Store.data.owned.map(getItem).filter(Boolean).forEach((i) => {
       const head = i.wear && i.wear.head && i.wear.head.image;
-      [i.image, head].filter(Boolean).forEach((u) => {
+      const front = i.wear && i.wear.front;
+      [i.image, head, front].filter(Boolean).forEach((u) => {
         urls.add(u);
         urls.add(backImageOf(u));
       });

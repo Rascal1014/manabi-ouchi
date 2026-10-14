@@ -1,5 +1,8 @@
 const SAVE_KEY = "manabi-ouchi-v1";
 
+// お店から なくなった商品。古いセーブに のこっていたら 取りのぞく（ポイントは もどさない）
+const REMOVED_ITEMS = ["vest", "pouch", "phone", "clock", "fish", "game", "guitar", "fountain"];
+
 const Store = {
   data: null,
 
@@ -28,7 +31,20 @@ const Store = {
     } catch (e) {
       this.data = this.defaults();
     }
+    this.dropRemoved();
     return this.data;
+  },
+
+  dropRemoved() {
+    const d = this.data;
+    const gone = (id) => REMOVED_ITEMS.includes(id);
+    d.owned = d.owned.filter((id) => !gone(id));
+    d.placements = d.placements.filter((p) => !gone(p.item));
+    for (const outfit of Object.values(d.outfits)) {
+      for (const slot of Object.keys(outfit)) {
+        if (gone(outfit[slot])) delete outfit[slot];
+      }
+    }
   },
 
   save() {

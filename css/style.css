@@ -320,7 +320,7 @@ button {
 img.wear {
   height: auto;
   max-width: none;
-  filter: drop-shadow(0 1.5cqw 1cqw rgba(80, 50, 20, 0.25));
+  filter: drop-shadow(0 0.4cqw 0.3cqw rgba(80, 50, 20, 0.18));
 }
 img.wear-clothes { opacity: 1; filter: none; }
 
@@ -1050,8 +1050,14 @@ img.wear-clothes { opacity: 1; filter: none; }
   filter: drop-shadow(0 4px 2px rgba(0, 0, 0, 0.2));
 }
 
+/* 画像の家具は 長いほうの辺を --size にし、下のはしを 足もとに合わせる */
 img.placed {
-  width: calc(var(--size, 14) * 1cqw);
+  width: auto;
+  height: auto;
+  max-width: calc(var(--size, 14) * 0.85cqw);
+  max-height: calc(var(--size, 14) * 0.85cqw);
+  transform: translate(-50%, -98%) scale(var(--depth, 1));
+  transform-origin: 50% 98%;
 }
 
 .placed.selected {

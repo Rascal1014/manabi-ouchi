@@ -7,6 +7,7 @@
   "background_color": "#fbf3e4",
   "theme_color": "#f0a35e",
   "icons": [
-    { "src": "img/characters/haro_normal.jpg", "sizes": "768x1024", "type": "image/jpeg" }
+    { "src": "img/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "img/icon-512.png", "sizes": "512x512", "type": "image/png" }
   ]
 }
