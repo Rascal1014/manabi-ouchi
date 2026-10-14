@@ -110,7 +110,9 @@ function addWear(wrap, charId, mood) {
   if (bag && !(back && hold === "both")) {
     // せおう ものは、前からは かたひもだけ、うしろからは 本体を 見せる
     const shown = hold === "back" && !back ? { ...bag, image: bag.wear.front } : bag;
-    const node = renderItemVisual(shown, `wear wear-bag mood-${mood}`);
+    // 日傘のように 顔に かぶる ものは、前から見たとき 体の うしろに まわす
+    const behind = bag.wear && bag.wear.behind && !back ? " wear-behind" : "";
+    const node = renderItemVisual(shown, `wear wear-bag mood-${mood}${behind}`);
     fitWear(node, "bag", bag.image && bag.wear, f, back);
     wrap.appendChild(node);
   }

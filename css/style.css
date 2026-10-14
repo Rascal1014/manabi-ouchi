@@ -302,7 +302,17 @@ button {
   pointer-events: none;
 }
 
+.chara-img {
+  position: relative;
+  z-index: 1;
+}
+
+.wear.wear-behind {
+  z-index: 0;
+}
+
 .wear {
+  z-index: 2;
   position: absolute;
   transform: translate(-50%, -50%);
   line-height: 1;
@@ -929,7 +939,7 @@ img.wear-clothes { opacity: 1; filter: none; }
 /* ---------- ショップ ---------- */
 .shop-list {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
 }
 
@@ -960,6 +970,8 @@ img.wear-clothes { opacity: 1; filter: none; }
 
 .shop-visual img.item-visual {
   height: 80px;
+  max-width: 100%;
+  object-fit: contain;
 }
 
 .shop-visual img.house-thumb {
@@ -1173,7 +1185,7 @@ img.placed {
 
 .inventory {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 8px;
 }
 
@@ -1196,6 +1208,8 @@ img.placed {
 
 .inventory-item img.item-visual {
   height: 40px;
+  max-width: 100%;
+  object-fit: contain;
 }
 
 .inventory-item.active {
@@ -1206,6 +1220,8 @@ img.placed {
 .inventory-name {
   font-size: 0.68rem;
   font-weight: bold;
+  text-align: center;
+  overflow-wrap: anywhere;
 }
 
 .inventory-empty {
