@@ -23,10 +23,15 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+img {
+  max-width: 100%;
+}
+
 html,
 body {
   margin: 0;
   min-height: 100%;
+  overflow-x: clip;
   font-family: var(--font);
   color: var(--brown);
   background-color: var(--cream);
@@ -81,14 +86,22 @@ button {
   min-height: 48px;
 }
 
+.topbar > * {
+  min-width: 0;
+}
+
 .topbar-title {
-  flex: 1;
+  flex: 1 1 auto;
   text-align: center;
   margin: 0;
-  font-size: 1.25rem;
+  font-size: clamp(1rem, 5vw, 1.25rem);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .icon-btn {
+  flex: none;
   width: 48px;
   height: 48px;
   border: 3px dashed var(--brown-light);
@@ -101,6 +114,7 @@ button {
 
 .points {
   display: flex;
+  flex: none;
   align-items: center;
   gap: 4px;
   padding: 6px 14px;
@@ -109,6 +123,7 @@ button {
   border-radius: 999px;
   font-weight: bold;
   font-size: 1.1rem;
+  white-space: nowrap;
   box-shadow: var(--shadow);
 }
 
@@ -194,7 +209,7 @@ button {
 
 .menu-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px;
 }
 
@@ -205,6 +220,8 @@ button {
 .menu-grid .btn {
   font-size: 1rem;
   padding: 16px 6px;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .menu-grid.big .btn {
@@ -222,6 +239,7 @@ button {
 }
 
 .back-btn {
+  flex: none;
   min-height: 48px;
   padding: 8px 16px;
   border: 3px solid var(--brown);
@@ -262,10 +280,13 @@ button {
   padding: 8px 16px;
   font-weight: bold;
   font-size: 1rem;
+  white-space: nowrap;
+  min-width: 0;
 }
 
 .chip.big {
-  flex: 1;
+  flex: 1 1 0;
+  min-width: 0;
   font-size: 1.25rem;
   padding: 14px 8px;
 }
@@ -286,6 +307,8 @@ button {
   gap: 4px;
   overflow-x: auto;
   padding-bottom: 4px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
 }
 
 .tab {
@@ -403,7 +426,7 @@ img.wear-clothes { opacity: 1; filter: none; }
 
 .first-list {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
 }
 
@@ -414,6 +437,7 @@ img.wear-clothes { opacity: 1; filter: none; }
   padding: 6px;
   color: var(--brown);
   box-shadow: var(--shadow);
+  min-width: 0;
 }
 
 .first-name {
@@ -425,6 +449,7 @@ img.wear-clothes { opacity: 1; filter: none; }
   font-size: 0.72rem;
   margin-top: 4px;
   line-height: 1.4;
+  overflow-wrap: anywhere;
 }
 
 /* ---------- ホーム ---------- */
@@ -488,6 +513,7 @@ img.wear-clothes { opacity: 1; filter: none; }
   padding: 10px 16px;
   border: 3px solid var(--brown-light);
   font-weight: bold;
+  overflow-wrap: anywhere;
 }
 
 .talk::before,
@@ -595,7 +621,7 @@ img.wear-clothes { opacity: 1; filter: none; }
   border: 4px solid var(--brown-light);
   border-radius: var(--radius);
   padding: 22px 16px;
-  font-size: 1.6rem;
+  font-size: clamp(1.2rem, 6vw, 1.6rem);
   line-height: 1.6;
   text-align: center;
   font-weight: bold;
@@ -618,6 +644,8 @@ img.wear-clothes { opacity: 1; filter: none; }
   font-weight: bold;
   color: #fff;
   box-shadow: 0 5px 0 rgba(0, 0, 0, 0.18);
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .choice-0 { background: var(--orange); }
@@ -857,15 +885,16 @@ img.wear-clothes { opacity: 1; filter: none; }
 
 .clear-title {
   margin: 0;
-  font-size: 3.4rem;
+  font-size: clamp(2.2rem, 12vw, 3.4rem);
   color: var(--orange-dark);
   text-shadow: 3px 3px 0 #fff, 6px 6px 0 rgba(122, 81, 54, 0.2);
   animation: pop-in 0.6s ease;
+  overflow-wrap: anywhere;
 }
 
 .perfect .clear-title {
   color: var(--red);
-  font-size: 3rem;
+  font-size: clamp(1.9rem, 10vw, 3rem);
 }
 
 @keyframes pop-in {
@@ -993,8 +1022,14 @@ img.wear-clothes { opacity: 1; filter: none; }
 .result-row {
   display: flex;
   justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
   padding: 8px 4px;
   border-bottom: 2px dotted var(--gray);
+}
+
+.result-row > span:first-child {
+  min-width: 0;
 }
 
 .result-row:last-child {
@@ -1003,6 +1038,8 @@ img.wear-clothes { opacity: 1; filter: none; }
 
 .result-value {
   font-weight: bold;
+  flex: none;
+  white-space: nowrap;
 }
 
 .result-total {
@@ -1044,6 +1081,7 @@ img.wear-clothes { opacity: 1; filter: none; }
   gap: 4px;
   text-align: center;
   box-shadow: var(--shadow);
+  min-width: 0;
 }
 
 .shop-visual {
@@ -1074,11 +1112,13 @@ img.wear-clothes { opacity: 1; filter: none; }
 
 .shop-name {
   font-weight: bold;
+  overflow-wrap: anywhere;
 }
 
 .shop-note {
   font-size: 0.75rem;
   opacity: 0.8;
+  overflow-wrap: anywhere;
 }
 
 .shop-buy {
@@ -1120,6 +1160,7 @@ img.wear-clothes { opacity: 1; filter: none; }
 
 /* ---------- おうち ---------- */
 .house-count {
+  flex: none;
   font-weight: bold;
   font-size: 0.9rem;
   white-space: nowrap;
@@ -1270,6 +1311,7 @@ img.placed {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: 8px;
 }
 
@@ -1289,6 +1331,7 @@ img.placed {
   align-items: center;
   gap: 2px;
   color: var(--brown);
+  min-width: 0;
 }
 
 .inventory-item .item-visual {
@@ -1373,6 +1416,88 @@ img.placed {
     padding: 5px;
     font-size: 0.9rem;
   }
+
+  .tab {
+    padding: 8px 4px;
+    font-size: 0.72rem;
+  }
+}
+
+/* ---------- 幅のせまい スマホ（iPhone SE など 360px以下） ---------- */
+@media (max-width: 360px) {
+  .screen {
+    padding: 10px 12px calc(24px + env(safe-area-inset-bottom));
+    gap: 10px;
+  }
+
+  .topbar {
+    gap: 6px;
+  }
+
+  .back-btn {
+    padding: 6px 12px;
+    font-size: 0.95rem;
+  }
+
+  .points {
+    padding: 5px 10px;
+    font-size: 0.95rem;
+  }
+
+  .icon-btn {
+    width: 44px;
+    height: 44px;
+  }
+
+  .chip.big {
+    font-size: 1.05rem;
+    padding: 12px 4px;
+  }
+
+  .chip {
+    padding: 8px 12px;
+  }
+
+  .choice {
+    padding: 16px 6px;
+    font-size: 1.15rem;
+  }
+
+  .menu-grid.big .btn {
+    font-size: 1rem;
+  }
+
+  .first-list {
+    gap: 6px;
+  }
+
+  .first-card {
+    padding: 4px;
+  }
+
+  .first-name {
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+
+  .first-profile {
+    font-size: 0.62rem;
+  }
+
+  .btn-huge {
+    font-size: 1.3rem;
+    padding: 18px 12px;
+  }
+
+  /* タブは5つあると320pxでは収まらないので、小画面では折り返して全部見せる */
+  .tabs {
+    flex-wrap: wrap;
+    overflow-x: visible;
+  }
+
+  .tab {
+    flex: 1 1 auto;
+  }
 }
 
 /* ---------- モーダル・トースト ---------- */
@@ -1391,6 +1516,8 @@ img.placed {
 .modal {
   width: 100%;
   max-width: 380px;
+  max-height: 90dvh;
+  overflow-y: auto;
   background: var(--paper);
   border-radius: var(--radius);
   border: 4px dashed var(--orange);
