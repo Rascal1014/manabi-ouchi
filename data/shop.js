@@ -51,7 +51,7 @@ const FLOORS = {
   "img/rooms/pool_1f.webp": { left: 8, right: 84, top: 56, bottom: 95 },
   "img/rooms/pool_2f.webp": { left: 10, right: 90, top: 52, bottom: 95 },
   // おしろは 奥に いる どうぶつたちに かさならないよう、床の上のはしを 手前にする
-  "img/rooms/castle_garden.webp": { left: 16, right: 84, top: 66, bottom: 90 },
+  "img/rooms/castle_garden.webp": { left: 8, right: 92, top: 58, bottom: 95 },
   "img/rooms/castle_entrance.webp": { left: 8, right: 92, top: 64, bottom: 95 },
   "img/rooms/castle_hall.webp": { left: 8, right: 92, top: 64, bottom: 95 },
   "img/rooms/castle_king.webp": { left: 8, right: 92, top: 60, bottom: 95 },

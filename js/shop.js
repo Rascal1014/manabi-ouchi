@@ -151,8 +151,9 @@ const Shop = {
 
   buyHouse(house) {
     Store.data.house = house.id;
+    Store.data.placements = [];
     Store.save();
-    toast(`${house.name} に ひっこしたよ！`);
+    toast(`${house.name} に ひっこしたよ！ かぐは もちものに もどしたよ`);
   },
 
   buyFriend(c, price) {
