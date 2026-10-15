@@ -26,11 +26,6 @@ const Dressup = {
     stage.innerHTML = "";
     stage.appendChild(renderCharacter(this.charId, "normal"));
 
-    const partnerBtn = $("#dress-partner");
-    const isPartner = Store.data.partner === this.charId;
-    partnerBtn.textContent = isPartner ? "★ あいぼう" : "あいぼうに する";
-    partnerBtn.disabled = isPartner;
-
     const slotTabs = $("#dress-slots");
     slotTabs.innerHTML = "";
     Object.keys(SLOT_NAMES).forEach((s) => {
@@ -72,14 +67,6 @@ const Dressup = {
     outfit[this.slot] = itemId;
     Store.data.outfits[this.charId] = outfit;
     Store.save();
-    this.render();
-  },
-
-  makePartner() {
-    Sound.correct();
-    Store.data.partner = this.charId;
-    Store.save();
-    toast(`${getCharacter(this.charId).name} が あいぼうに なったよ！`);
     this.render();
   },
 };

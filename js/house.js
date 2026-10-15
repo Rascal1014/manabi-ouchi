@@ -7,7 +7,17 @@ const House = {
 
   open() {
     const house = getHouse(Store.data.house);
-    if (!house.rooms[this.area]) this.area = "1f";
+    const areas = Object.keys(house.rooms);
+    if (!house.rooms[this.area]) this.area = areas[0];
+    // ひっこし先に ない へやに おいていた かぐは、さいしょの へやに うつす
+    let moved = false;
+    Store.data.placements.forEach((p) => {
+      if (!house.rooms[p.area]) {
+        p.area = areas[0];
+        moved = true;
+      }
+    });
+    if (moved) Store.save();
     this.selected = null;
     // きせかえを変えたかもしれないので、キャラを作りなおす
     this.version++;
@@ -25,7 +35,7 @@ const House = {
     const areas = Object.keys(house.rooms);
     tabs.hidden = areas.length < 2;
     areas.forEach((a) => {
-      const b = el("button", "tab" + (a === this.area ? " active" : ""), AREA_NAMES[a]);
+      const b = el("button", "tab" + (a === this.area ? " active" : ""), areaName(house, a));
       b.onclick = () => {
         Sound.tap();
         this.area = a;

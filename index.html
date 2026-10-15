@@ -30,13 +30,20 @@
         <button id="btn-sound" class="icon-btn">🔊</button>
       </header>
       <h1 class="title small">まなびの おうち</h1>
-      <div id="home-chara" class="home-stage"></div>
-      <p id="home-talk" class="talk"></p>
+      <div class="home-stage-wrap">
+        <p id="home-talk" class="talk"></p>
+        <div class="home-row">
+          <button id="home-prev" class="nav-arrow" aria-label="まえの なかま">◀</button>
+          <div id="home-chara" class="home-stage"></div>
+          <button id="home-next" class="nav-arrow" aria-label="つぎの なかま">▶</button>
+        </div>
+        <div id="home-partner-name" class="partner-name"></div>
+      </div>
       <button id="btn-study" class="btn btn-orange btn-huge">✏️ べんきょうする</button>
-      <div class="menu-grid">
-        <button id="btn-house" class="btn btn-green">🏠 おうち</button>
-        <button id="btn-dress" class="btn btn-pink">👗 きせかえ</button>
-        <button id="btn-shop" class="btn btn-blue">🛒 ショップ</button>
+      <div class="menu-grid big">
+        <button id="btn-house" class="btn btn-green"><span class="menu-icon">🏠</span>おうち</button>
+        <button id="btn-dress" class="btn btn-pink"><span class="menu-icon">👗</span>きせかえ</button>
+        <button id="btn-shop" class="btn btn-blue"><span class="menu-icon">🛍️</span>ショップ</button>
       </div>
       <button id="btn-reset" class="reset-link">さいしょから やりなおす</button>
     </section>
@@ -44,7 +51,7 @@
     <!-- コース選択 -->
     <section id="screen-course" class="screen">
       <header class="topbar">
-        <button class="icon-btn" data-home>◀</button>
+        <button class="back-btn" data-home>◀ もどる</button>
         <div class="points"><span class="coin">⭐</span><span class="points-value">0</span></div>
       </header>
       <h2 id="course-pack-title" class="heading"></h2>
@@ -108,7 +115,7 @@
       <p id="result-points" class="result-points"></p>
       <button id="btn-result-again" class="btn btn-orange btn-huge">もう いちど</button>
       <div class="menu-grid two">
-        <button id="btn-result-shop" class="btn btn-blue">🛒 ショップ</button>
+        <button id="btn-result-shop" class="btn btn-blue">🛍️ ショップ</button>
         <button id="btn-result-home" class="btn btn-green">🏠 ホーム</button>
       </div>
     </section>
@@ -116,7 +123,7 @@
     <!-- ショップ -->
     <section id="screen-shop" class="screen">
       <header class="topbar">
-        <button class="icon-btn" data-home>◀</button>
+        <button class="back-btn" data-home>◀ もどる</button>
         <h2 class="topbar-title">ショップ</h2>
         <div class="points"><span class="coin">⭐</span><span class="points-value">0</span></div>
       </header>
@@ -127,7 +134,7 @@
     <!-- おうち -->
     <section id="screen-house" class="screen">
       <header class="topbar">
-        <button class="icon-btn" data-home>◀</button>
+        <button class="back-btn" data-home>◀ もどる</button>
         <h2 id="house-name" class="topbar-title"></h2>
         <div id="house-count" class="house-count"></div>
       </header>
@@ -144,15 +151,12 @@
     <!-- きせかえ -->
     <section id="screen-dress" class="screen">
       <header class="topbar">
-        <button class="icon-btn" data-home>◀</button>
+        <button class="back-btn" data-home>◀ もどる</button>
         <h2 class="topbar-title">きせかえ</h2>
         <div class="points"><span class="coin">⭐</span><span class="points-value">0</span></div>
       </header>
       <div id="dress-charas" class="tabs"></div>
-      <div class="dress-stage-wrap">
-        <div id="dress-stage" class="dress-stage"></div>
-        <button id="dress-partner" class="btn btn-pink small">あいぼうに する</button>
-      </div>
+      <div id="dress-stage" class="dress-stage"></div>
       <div id="dress-slots" class="tabs"></div>
       <div id="dress-items" class="inventory"></div>
     </section>

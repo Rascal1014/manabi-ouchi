@@ -207,6 +207,33 @@ button {
   padding: 16px 6px;
 }
 
+.menu-grid.big .btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 1.15rem;
+  padding: 16px 6px;
+}
+
+.menu-icon {
+  font-size: 2.2rem;
+  line-height: 1;
+}
+
+.back-btn {
+  min-height: 48px;
+  padding: 8px 16px;
+  border: 3px solid var(--brown);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--brown);
+  font-size: 1.05rem;
+  font-weight: bold;
+  white-space: nowrap;
+  box-shadow: var(--shadow);
+}
+
 .panel {
   background: var(--paper);
   border: 3px dashed var(--brown-light);
@@ -401,25 +428,88 @@ img.wear-clothes { opacity: 1; filter: none; }
 }
 
 /* ---------- ホーム ---------- */
+.home-stage-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.home-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
 .home-stage {
+  flex: 1;
   display: flex;
   justify-content: center;
 }
 
 .home-chara {
-  width: 62%;
+  width: 72%;
   animation: bob 2.4s ease-in-out infinite;
   cursor: pointer;
 }
 
+.nav-arrow {
+  flex: none;
+  width: 48px;
+  height: 64px;
+  border: 3px solid var(--brown-light);
+  border-radius: 16px;
+  background: var(--paper);
+  color: var(--brown);
+  font-size: 1.4rem;
+  box-shadow: var(--shadow);
+}
+
+.nav-arrow[hidden] {
+  display: block;
+  visibility: hidden;
+}
+
+.partner-name {
+  font-weight: bold;
+  color: var(--brown);
+  font-size: 0.95rem;
+}
+
+/* キャラの あたまの上の ふきだし（しっぽは 下向き） */
 .talk {
-  margin: 0;
+  position: relative;
+  margin: 0 0 10px;
+  max-width: 88%;
   text-align: center;
   background: #fff;
-  border-radius: var(--radius);
-  padding: 12px;
+  border-radius: 18px;
+  padding: 10px 16px;
   border: 3px solid var(--brown-light);
   font-weight: bold;
+}
+
+.talk::before,
+.talk::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  border-style: solid;
+  border-color: transparent;
+}
+
+.talk::before {
+  bottom: -16px;
+  border-width: 14px 12px 0;
+  border-top-color: var(--brown-light);
+}
+
+.talk::after {
+  bottom: -10px;
+  border-width: 10px 8px 0;
+  border-top-color: #fff;
 }
 
 /* ---------- コース選択 ---------- */
@@ -1246,19 +1336,6 @@ img.placed {
 }
 
 /* あいぼうボタンは キャラの 左上に のせて、下の アイテムを 多く見せる */
-.dress-stage-wrap {
-  position: relative;
-}
-
-.dress-stage-wrap #dress-partner {
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  padding: 6px 10px;
-  font-size: 0.8rem;
-  z-index: 3;
-}
-
 @media (max-width: 600px) {
   .shop-list {
     gap: 8px;

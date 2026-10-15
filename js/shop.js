@@ -56,7 +56,7 @@ const Shop = {
       if (i === currentIndex) state = "current";
       else if (i < currentIndex) state = "owned";
       else if (i > currentIndex + 1) state = "locked";
-      const areas = Object.keys(house.rooms).map((a) => AREA_NAMES[a]).join("・");
+      const areas = Object.keys(house.rooms).map((a) => areaName(house, a)).join("・");
       const img = el("img", "item-visual house-thumb");
       img.src = house.image;
       list.appendChild(

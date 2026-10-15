@@ -62,7 +62,8 @@ const App = {
     on("#btn-result-again", () => { Sound.tap(); Quiz.openCourseSelect(); });
     on("#btn-result-shop", () => { Sound.tap(); Shop.open(); });
     on("#house-remove", () => House.removeSelected());
-    on("#dress-partner", () => Dressup.makePartner());
+    on("#home-prev", () => this.switchPartner(-1));
+    on("#home-next", () => this.switchPartner(1));
     on("#btn-reset", () => { Sound.tap(); this.confirmReset(); });
     on("#btn-sound", () => {
       Store.data.sound = !Store.data.sound;
@@ -146,8 +147,33 @@ const App = {
 
   // ---------- ホーム ----------
   goHome() {
+    this.renderHomeChara();
+    $("#home-streak").textContent = Store.data.loginStreak
+      ? `れんぞく ${Store.data.loginStreak}日め`
+      : "";
+    this.renderSoundButton();
+    this.show("home");
+  },
+
+  switchPartner(dir) {
+    const ids = Store.data.characters;
+    if (ids.length < 2) return;
+    Sound.tap();
+    const i = ids.indexOf(Store.data.partner);
+    Store.data.partner = ids[(i + dir + ids.length) % ids.length];
+    Store.save();
+    const chara = this.renderHomeChara();
+    chara.classList.add("jump");
+    setTimeout(() => chara.classList.remove("jump"), 1200);
+  },
+
+  renderHomeChara() {
     const partner = Store.data.partner;
     const c = getCharacter(partner);
+    const multi = Store.data.characters.length > 1;
+    $("#home-prev").hidden = !multi;
+    $("#home-next").hidden = !multi;
+    $("#home-partner-name").textContent = `★ あいぼう：${c.name}`;
     const stage = $("#home-chara");
     stage.innerHTML = "";
     const chara = renderCharacter(partner, "normal", { className: "home-chara" });
@@ -169,12 +195,8 @@ const App = {
       "おうちを 大きく したいね！",
       "れんぞく せいかいで ポイント アップ！",
     ];
-    $("#home-talk").textContent = `${c.name}「${lines[Math.floor(Math.random() * lines.length)]}」`;
-    $("#home-streak").textContent = Store.data.loginStreak
-      ? `れんぞく ${Store.data.loginStreak}日め`
-      : "";
-    this.renderSoundButton();
-    this.show("home");
+    $("#home-talk").textContent = lines[Math.floor(Math.random() * lines.length)];
+    return chara;
   },
 
   checkLoginBonus() {
