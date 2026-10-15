@@ -289,12 +289,13 @@ button {
 }
 
 .tab {
-  flex: 1 0 auto;
+  flex: 1 1 0;
+  min-width: 0;
   border: 3px solid var(--brown-light);
   background: var(--paper);
   color: var(--brown);
   border-radius: 14px 14px 6px 6px;
-  padding: 10px 6px;
+  padding: 10px 4px;
   font-weight: bold;
   font-size: 0.8rem;
   white-space: nowrap;
@@ -1335,8 +1336,62 @@ img.placed {
   width: 55%;
 }
 
-/* あいぼうボタンは キャラの 左上に のせて、下の アイテムを 多く見せる */
 @media (max-width: 600px) {
+  .screen {
+    gap: 8px;
+    padding: 8px 12px calc(16px + env(safe-area-inset-bottom));
+  }
+
+  .title.small {
+    margin: 0;
+    font-size: 1.35rem;
+  }
+
+  .home-chara {
+    width: 62%;
+  }
+
+  .talk {
+    margin: 0 0 8px;
+    padding: 8px 14px;
+    font-size: 0.92rem;
+  }
+
+  .btn-huge {
+    font-size: 1.35rem;
+    padding: 14px;
+  }
+
+  .menu-grid.big .btn {
+    padding: 12px 4px;
+    font-size: 1.05rem;
+  }
+
+  .menu-icon {
+    font-size: 1.8rem;
+  }
+
+  .reset-link {
+    margin-top: 6px;
+  }
+
+  .room {
+    max-width: min(100%, 40dvh);
+    margin: 0 auto;
+  }
+
+  #screen-house .panel-title {
+    margin: 2px 0;
+  }
+
+  .dress-stage {
+    padding: 4px;
+  }
+
+  .dress-stage .chara {
+    width: 40%;
+  }
+
   .shop-list {
     gap: 8px;
   }

@@ -322,7 +322,10 @@ const House = {
     Sound.tap();
     const uid = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
     const f = this.floor(house);
-    const x = f.left + Math.random() * (f.right - f.left);
+    const pad = Math.min(20, ((item.size || 14) * FURNITURE_SCALE * 0.85) / 2);
+    const left = Math.max(f.left, pad);
+    const right = Math.min(f.right, 100 - pad);
+    const x = left + Math.random() * Math.max(0, right - left);
     const y = f.top + 4 + Math.random() * (f.bottom - f.top - 14);
     Store.data.placements.push({ uid, item: item.id, area: this.area, x, y });
     Store.save();
@@ -354,8 +357,10 @@ const House = {
         if (!moved) return;
         const x = ((ev.clientX - rect.left) / rect.width) * 100;
         const y = ((ev.clientY - rect.top) / rect.height) * 100;
-        placement.x = Math.max(0, Math.min(100, x));
-        placement.y = Math.max(0, Math.min(100, y));
+        const halfW = ((node.offsetWidth / rect.width) * 100 * this.depthScale(y, floor)) / 2;
+        const fullH = (node.offsetHeight / rect.height) * 100 * this.depthScale(y, floor);
+        placement.x = Math.max(halfW, Math.min(100 - halfW, x));
+        placement.y = Math.max(Math.min(50, fullH), Math.min(98, y));
         this.placeFurniture(node, placement, floor);
         node.style.zIndex = 200;
       };
