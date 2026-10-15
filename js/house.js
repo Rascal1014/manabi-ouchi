@@ -84,9 +84,15 @@ const House = {
         if (!item) return;
         const node = renderItemVisual(item, "placed" + (p.uid === this.selected ? " selected" : ""));
         node.style.setProperty("--size", (item.size || 14) * FURNITURE_SCALE);
+        room.appendChild(node);
         this.placeFurniture(node, p, floor);
         this.makeDraggable(node, p, floor);
-        room.appendChild(node);
+        // 画像の実寸が分かってから、家具全体が部屋の枠内に入るよう補正する
+        const keepVisible = () => {
+          if (this.keepFurnitureVisible(node, p, floor)) Store.save();
+        };
+        if (node.complete) requestAnimationFrame(keepVisible);
+        else node.addEventListener("load", keepVisible, { once: true });
       });
 
     if (!this.walkers.length) {
@@ -121,6 +127,33 @@ const House = {
     node.style.top = p.y + "%";
     node.style.setProperty("--depth", this.depthScale(p.y, floor).toFixed(3));
     node.style.zIndex = Math.round(p.y);
+  },
+
+  // 家具の中心ではなく、表示されている画像全体を部屋の内側に収める
+  keepFurnitureVisible(node, placement, floor) {
+    const room = node.parentElement;
+    if (!room || !node.getBoundingClientRect().width) return false;
+
+    const roomRect = room.getBoundingClientRect();
+    const nodeRect = node.getBoundingClientRect();
+    const style = getComputedStyle(room);
+    const left = roomRect.left + parseFloat(style.borderLeftWidth);
+    const right = roomRect.right - parseFloat(style.borderRightWidth);
+    const top = roomRect.top + parseFloat(style.borderTopWidth);
+    const bottom = roomRect.bottom - parseFloat(style.borderBottomWidth);
+    let dx = 0;
+    let dy = 0;
+
+    if (nodeRect.left < left) dx = left - nodeRect.left;
+    else if (nodeRect.right > right) dx = right - nodeRect.right;
+    if (nodeRect.top < top) dy = top - nodeRect.top;
+    else if (nodeRect.bottom > bottom) dy = bottom - nodeRect.bottom;
+    if (!dx && !dy) return false;
+
+    placement.x = Math.max(0, Math.min(100, placement.x + dx / room.clientWidth * 100));
+    placement.y = Math.max(0, Math.min(100, placement.y + dy / room.clientHeight * 100));
+    this.placeFurniture(node, placement, floor);
+    return true;
   },
 
   // ---------- キャラが部屋を歩く ----------
@@ -357,6 +390,7 @@ const House = {
         placement.x = Math.max(0, Math.min(100, x));
         placement.y = Math.max(0, Math.min(100, y));
         this.placeFurniture(node, placement, floor);
+        this.keepFurnitureVisible(node, placement, floor);
         node.style.zIndex = 200;
       };
       const onUp = () => {
