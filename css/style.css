@@ -512,6 +512,39 @@ img.wear-clothes { opacity: 1; filter: none; }
   border-top-color: #fff;
 }
 
+/* ホームは 1画面に おさめる（下の ボタンが みきれないように） */
+#screen-home {
+  gap: 8px;
+  padding-top: calc(4px + env(safe-area-inset-top));
+}
+
+#screen-home .topbar {
+  min-height: 40px;
+}
+
+#screen-home .title.small {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+#screen-home .talk {
+  margin-bottom: 8px;
+  padding: 6px 14px;
+  font-size: 0.95rem;
+}
+
+#screen-home .home-chara {
+  width: min(62%, 30dvh);
+}
+
+#screen-home .btn-huge {
+  padding: 14px;
+}
+
+#screen-home .menu-grid.big .btn {
+  padding: 10px 6px;
+}
+
 /* ---------- コース選択 ---------- */
 .highscore {
   text-align: center;
