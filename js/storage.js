@@ -13,7 +13,7 @@ const Store = {
     return {
       characters: [], // 一緒にくらしているキャラクターのid
       partner: null, // ホームやクイズに出てくるキャラクター
-      points: 20000,
+      points: 200000,
       house: "oneroom",
       owned: [], // 買った商品のid
       placements: [], // { uid, item, area, x, y }
