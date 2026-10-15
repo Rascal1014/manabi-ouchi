@@ -448,8 +448,11 @@ img.wear-clothes { opacity: 1; filter: none; }
   justify-content: center;
 }
 
+/* 画面が低いスマホでは、下のメニューまで 1画面に おさまるように キャラを小さくする（420px は キャラ以外の高さ） */
 .home-chara {
   width: 72%;
+  width: clamp(96px, calc((100vh - 420px) * 0.75), 72%);
+  width: clamp(96px, calc((100dvh - 420px) * 0.75), 72%);
   animation: bob 2.4s ease-in-out infinite;
   cursor: pointer;
 }
@@ -512,6 +515,41 @@ img.wear-clothes { opacity: 1; filter: none; }
   border-top-color: #fff;
 }
 
+/* 低い画面（ブラウザのバーが出ているスマホなど）では、ホームの すきまや文字を つめる */
+@media (max-height: 760px) {
+  #screen-home {
+    gap: 8px;
+  }
+
+  #screen-home .title.small {
+    font-size: 1.3rem;
+    margin: 0;
+  }
+
+  .talk {
+    padding: 8px 14px;
+    font-size: 0.95rem;
+  }
+
+  #screen-home .btn-huge {
+    padding: 14px;
+    font-size: 1.35rem;
+  }
+
+  .menu-grid.big .btn {
+    padding: 10px 6px;
+    font-size: 1.05rem;
+  }
+
+  .menu-grid.big .menu-icon {
+    font-size: 1.8rem;
+  }
+
+  .reset-link {
+    margin-top: 4px;
+  }
+}
+
 /* ---------- コース選択 ---------- */
 .highscore {
   text-align: center;
@@ -525,6 +563,33 @@ img.wear-clothes { opacity: 1; filter: none; }
 
 .rule p {
   margin: 4px 0;
+}
+
+/* 低い画面でも スタートボタンまで 1画面に おさまるように つめる */
+@media (max-height: 760px) {
+  #screen-course {
+    gap: 8px;
+  }
+
+  #screen-course .panel {
+    padding: 10px;
+  }
+
+  #screen-course .chip.big {
+    padding: 10px 8px;
+  }
+
+  #screen-course .highscore {
+    margin-top: 8px;
+  }
+
+  .rule {
+    font-size: 0.8rem;
+  }
+
+  .rule p {
+    margin: 2px 0;
+  }
 }
 
 /* ---------- クイズ ---------- */
