@@ -289,8 +289,7 @@ button {
 }
 
 .tab {
-  flex: 1 1 0;
-  min-width: 0;
+  flex: 1 0 auto;
   border: 3px solid var(--brown-light);
   background: var(--paper);
   color: var(--brown);
@@ -1342,13 +1341,18 @@ img.placed {
     padding: 8px 12px calc(16px + env(safe-area-inset-bottom));
   }
 
+  .title-image {
+    max-height: 28dvh;
+    object-fit: cover;
+  }
+
   .title.small {
     margin: 0;
     font-size: 1.35rem;
   }
 
   .home-chara {
-    width: 62%;
+    width: min(60%, 25dvh);
   }
 
   .talk {
@@ -1372,7 +1376,7 @@ img.placed {
   }
 
   .reset-link {
-    margin-top: 6px;
+    margin-top: 4px;
   }
 
   .room {
@@ -1389,7 +1393,7 @@ img.placed {
   }
 
   .dress-stage .chara {
-    width: 40%;
+    width: min(40%, 22dvh);
   }
 
   .shop-list {

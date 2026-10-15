@@ -91,9 +91,11 @@ const House = {
 
     if (!this.walkers.length) {
       const ids = Store.data.characters;
+      const wLeft = Math.max(floor.left, 14);
+      const wRight = Math.min(floor.right, 86);
       ids.forEach((id, i) => {
         // 横にばらけるように、最初は床を等分した位置から歩きはじめる
-        const x = floor.left + ((i + 0.5) / ids.length) * (floor.right - floor.left);
+        const x = wLeft + ((i + 0.5) / ids.length) * (wRight - wLeft);
         const y = floor.top + (0.45 + Math.random() * 0.4) * (floor.bottom - floor.top);
         const w = this.makeWalker(id, x, y, i);
         this.walkers.push(w);
@@ -115,12 +117,18 @@ const House = {
     return 0.72 + d * 0.38;
   },
 
-  // 家具は足もと（下のはし）が p.x, p.y
+  // 家具は足もと（下のはし）が p.x, p.y。部屋の端で見切れないよう内側に収める
   placeFurniture(node, p, floor) {
-    node.style.left = p.x + "%";
-    node.style.top = p.y + "%";
-    node.style.setProperty("--depth", this.depthScale(p.y, floor).toFixed(3));
-    node.style.zIndex = Math.round(p.y);
+    const depth = this.depthScale(p.y, floor);
+    const sizePct = parseFloat(node.style.getPropertyValue("--size")) || 25;
+    const halfW = Math.min(45, (sizePct * 0.85 * depth) / 2 + 1);
+    const minY = Math.min(50, sizePct * 0.85 * depth + 2);
+    const x = Math.max(halfW, Math.min(100 - halfW, p.x));
+    const y = Math.max(minY, Math.min(98, p.y));
+    node.style.left = x + "%";
+    node.style.top = y + "%";
+    node.style.setProperty("--depth", depth.toFixed(3));
+    node.style.zIndex = Math.round(y);
   },
 
   // ---------- キャラが部屋を歩く ----------
@@ -193,7 +201,9 @@ const House = {
     if (w.state === "idle") {
       w.wait -= dt;
       if (w.wait <= 0) {
-        w.tx = floor.left + Math.random() * (floor.right - floor.left);
+        const wLeft = Math.max(floor.left, 14);
+        const wRight = Math.min(floor.right, 86);
+        w.tx = wLeft + Math.random() * (wRight - wLeft);
         w.ty = floor.top + Math.random() * (floor.bottom - floor.top);
         w.state = "walk";
         w.beat = 0;
@@ -322,11 +332,12 @@ const House = {
     Sound.tap();
     const uid = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
     const f = this.floor(house);
-    const pad = Math.min(20, ((item.size || 14) * FURNITURE_SCALE * 0.85) / 2);
+    const y = f.top + 4 + Math.random() * (f.bottom - f.top - 14);
+    const depth = this.depthScale(y, f);
+    const pad = Math.min(45, ((item.size || 14) * FURNITURE_SCALE * 0.85 * depth) / 2 + 1);
     const left = Math.max(f.left, pad);
     const right = Math.min(f.right, 100 - pad);
-    const x = left + Math.random() * Math.max(0, right - left);
-    const y = f.top + 4 + Math.random() * (f.bottom - f.top - 14);
+    const x = left <= right ? left + Math.random() * (right - left) : 50;
     Store.data.placements.push({ uid, item: item.id, area: this.area, x, y });
     Store.save();
     this.selected = uid;
