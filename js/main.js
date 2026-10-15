@@ -1,6 +1,7 @@
 const App = {
   init() {
     Store.load();
+    this.applyTestPoints();
     this.bindButtons();
     if (!Store.data.characters.length) {
       this.openFirstSelect();
@@ -10,6 +11,16 @@ const App = {
     }
     this.registerServiceWorker();
     this.preloadImages();
+  },
+
+  // テスト用：?testpoints=20000 で ひらくと ポイントを その数に する（アドレスからは すぐ消す）
+  applyTestPoints() {
+    const params = new URLSearchParams(location.search);
+    const n = parseInt(params.get("testpoints"), 10);
+    if (!Number.isFinite(n) || n < 0) return;
+    Store.data.points = n;
+    Store.save();
+    history.replaceState(null, "", location.pathname);
   },
 
   // 画面を切りかえたときに絵がすぐ出るように、今 使うものだけ 先に読みこんでおく
