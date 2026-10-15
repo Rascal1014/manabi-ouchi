@@ -428,28 +428,54 @@ img.wear-clothes { opacity: 1; filter: none; }
 }
 
 /* ---------- ホーム ---------- */
+/* スマホでも 下のメニューが 切れないよう、画面の高さに 合わせて キャラを 小さくする */
+#screen-home.active {
+  height: 100dvh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+#screen-home .topbar,
+#screen-home .title,
+#screen-home > .btn-huge,
+#screen-home .menu-grid,
+#screen-home .reset-link {
+  flex-shrink: 0;
+}
+
 .home-stage-wrap {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 4px;
+  flex: 1 1 0;
+  min-height: 0;
+  width: 100%;
 }
 
 .home-row {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
   width: 100%;
 }
 
 .home-stage {
   flex: 1;
+  min-width: 0;
   display: flex;
   justify-content: center;
+  align-items: flex-end;
+  /* ぼうしが ふきだしに かぶらないように、てっぺんを あける */
+  padding-top: 7dvh;
 }
 
 .home-chara {
-  width: 72%;
+  /* 短い画面では 高さを 抑えて、下のメニューを 残す */
+  width: min(72%, calc(34dvh * 3 / 4));
+  height: auto;
   animation: bob 2.4s ease-in-out infinite;
   cursor: pointer;
 }
@@ -472,6 +498,7 @@ img.wear-clothes { opacity: 1; filter: none; }
 }
 
 .partner-name {
+  flex: none;
   font-weight: bold;
   color: var(--brown);
   font-size: 0.95rem;
@@ -480,7 +507,9 @@ img.wear-clothes { opacity: 1; filter: none; }
 /* キャラの あたまの上の ふきだし（しっぽは 下向き） */
 .talk {
   position: relative;
-  margin: 0 0 10px;
+  z-index: 2;
+  flex: none;
+  margin: 0 0 4px;
   max-width: 88%;
   text-align: center;
   background: #fff;
@@ -1372,6 +1401,60 @@ img.placed {
   .shop-buy {
     padding: 5px;
     font-size: 0.9rem;
+  }
+}
+
+/* 短い画面では ホームの余白を つめて、メニューが 切れないようにする */
+@media (max-height: 760px) {
+  #screen-home.active {
+    gap: 8px;
+    padding-top: 8px;
+    padding-bottom: calc(10px + env(safe-area-inset-bottom));
+  }
+
+  #screen-home .title.small {
+    font-size: 1.2rem;
+    margin: 0;
+  }
+
+  #screen-home .btn-huge {
+    font-size: 1.25rem;
+    padding: 12px;
+  }
+
+  #screen-home .menu-grid.big .btn {
+    padding: 10px 6px;
+    font-size: 1rem;
+  }
+
+  #screen-home .menu-icon {
+    font-size: 1.7rem;
+  }
+
+  #screen-home .talk {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+  }
+
+  #screen-home .reset-link {
+    margin-top: 2px;
+  }
+
+  #screen-home .nav-arrow {
+    width: 40px;
+    height: 52px;
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+  #screen-home.active {
+    height: auto;
+    min-height: 100dvh;
+  }
+
+  .home-chara {
+    max-height: 42dvh;
   }
 }
 
