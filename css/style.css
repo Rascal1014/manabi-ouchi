@@ -428,7 +428,15 @@ img.wear-clothes { opacity: 1; filter: none; }
 }
 
 /* ---------- ホーム ---------- */
+/* スクロールしなくても メニューまで 見えるように、キャラの 大きさを 画面の 高さに あわせる */
+#screen-home {
+  height: 100vh;
+  height: 100dvh;
+}
+
 .home-stage-wrap {
+  flex: 1 1 0;
+  min-height: 190px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -436,6 +444,8 @@ img.wear-clothes { opacity: 1; filter: none; }
 }
 
 .home-row {
+  flex: 1 1 0;
+  min-height: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -444,12 +454,16 @@ img.wear-clothes { opacity: 1; filter: none; }
 
 .home-stage {
   flex: 1;
+  align-self: stretch;
+  min-width: 0;
+  container-type: size;
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 .home-chara {
-  width: 72%;
+  width: min(72cqw, 75cqh);
   animation: bob 2.4s ease-in-out infinite;
   cursor: pointer;
 }
@@ -1372,6 +1386,48 @@ img.placed {
   .shop-buy {
     padding: 5px;
     font-size: 0.9rem;
+  }
+}
+
+/* たての みじかい スマホでも 下の ボタンまで 見えるように つめる */
+@media (max-height: 700px) {
+  .screen {
+    gap: 8px;
+    padding-bottom: calc(12px + env(safe-area-inset-bottom));
+  }
+
+  .title.small {
+    font-size: 1.25rem;
+    margin: 0;
+  }
+
+  .btn-huge {
+    padding: 14px;
+  }
+
+  .menu-grid.big .btn {
+    padding: 10px 6px;
+  }
+
+  .menu-icon {
+    font-size: 1.8rem;
+  }
+
+  .reset-link {
+    margin-top: 0;
+    padding: 2px 12px;
+  }
+
+  .chip.big {
+    padding: 10px 8px;
+  }
+
+  .panel {
+    padding: 10px 14px;
+  }
+
+  .rule {
+    font-size: 0.8rem;
   }
 }
 
