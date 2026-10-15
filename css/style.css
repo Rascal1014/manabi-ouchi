@@ -449,7 +449,7 @@ img.wear-clothes { opacity: 1; filter: none; }
 }
 
 .home-chara {
-  width: 72%;
+  width: clamp(120px, calc((100dvh - 460px) * 0.75), 72%);
   animation: bob 2.4s ease-in-out infinite;
   cursor: pointer;
 }
@@ -1333,6 +1333,39 @@ img.placed {
 
 .dress-stage .chara {
   width: 55%;
+}
+
+/* 背の低い スマホでは ホームの 余白を つめて、下の メニューまで 見えるように */
+@media (max-height: 860px) {
+  #screen-home {
+    gap: 8px;
+  }
+
+  #screen-home .title.small {
+    font-size: 1.3rem;
+    margin: 0;
+  }
+
+  #screen-home .talk {
+    margin-bottom: 8px;
+    padding: 6px 14px;
+  }
+
+  #screen-home .btn-huge {
+    padding: 14px;
+  }
+
+  #screen-home .menu-grid.big .btn {
+    padding: 10px 6px;
+  }
+
+  #screen-home .menu-icon {
+    font-size: 1.8rem;
+  }
+
+  #screen-home .reset-link {
+    margin-top: 4px;
+  }
 }
 
 /* あいぼうボタンは キャラの 左上に のせて、下の アイテムを 多く見せる */
