@@ -428,11 +428,27 @@ img.wear-clothes { opacity: 1; filter: none; }
 }
 
 /* ---------- ホーム ---------- */
+/* ふきだしを小さくして上を詰め、スマホでも下のボタンが画面におさまるようにする */
+#screen-home {
+  gap: 8px;
+  padding-top: 8px;
+  padding-bottom: calc(10px + env(safe-area-inset-bottom));
+}
+
+#screen-home .title.small {
+  margin: 0;
+  line-height: 1.2;
+}
+
+#screen-home .reset-link {
+  margin: 2px auto 0;
+}
+
 .home-stage-wrap {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
 }
 
 .home-row {
@@ -477,17 +493,21 @@ img.wear-clothes { opacity: 1; filter: none; }
   font-size: 0.95rem;
 }
 
-/* キャラの あたまの上の ふきだし（しっぽは 下向き） */
+/* キャラの あたまの上の ふきだし（しっぽは 下向き）。1行にして 高さをへらす */
 .talk {
   position: relative;
-  margin: 0 0 10px;
-  max-width: 88%;
+  flex: none;
+  margin: 0 0 6px;
+  max-width: 100%;
   text-align: center;
   background: #fff;
-  border-radius: 18px;
-  padding: 10px 16px;
+  border-radius: 16px;
+  padding: 5px 12px;
   border: 3px solid var(--brown-light);
   font-weight: bold;
+  font-size: 0.95rem;
+  line-height: 1.3;
+  white-space: nowrap;
 }
 
 .talk::before,
@@ -501,15 +521,49 @@ img.wear-clothes { opacity: 1; filter: none; }
 }
 
 .talk::before {
-  bottom: -16px;
-  border-width: 14px 12px 0;
+  bottom: -11px;
+  border-width: 10px 8px 0;
   border-top-color: var(--brown-light);
 }
 
 .talk::after {
-  bottom: -10px;
-  border-width: 10px 8px 0;
+  bottom: -7px;
+  border-width: 7px 5px 0;
   border-top-color: #fff;
+}
+
+/* 画面の高さが足りないスマホでは、キャラだけ縮めて下のボタンを画面内に残す */
+@media (max-height: 820px) {
+  #screen-home {
+    height: 100vh;
+    height: 100svh;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  #screen-home .home-stage-wrap {
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  #screen-home .home-row {
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  #screen-home .home-stage {
+    height: 100%;
+    min-height: 0;
+    align-items: center;
+    container-type: size;
+  }
+
+  /* 余った高さに合わせる。横は今までどおり最大72% */
+  #screen-home .home-chara {
+    width: min(72cqi, calc(100cqh * 0.75));
+    max-width: none;
+    height: auto;
+  }
 }
 
 /* ---------- コース選択 ---------- */
