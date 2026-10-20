@@ -2,14 +2,14 @@
 const FURNITURE_SCALE = 1.8;
 
 // 近づいたら、立ち止まりのあいだ 入る 家具。
-// show は 絵の上から どこまで 見せるか。いす・ソファは 服まで。ほかは 頭だけ。
-// scale は 足もとを 基準に ちぢむ。こたつだけ 2人。ほかは 1人。
+// いす・ソファは 服を着たまま。こたつ・ベッド・ふろは 服を出さず、頭だけの絵。
+// こたつだけ 2人。ほかは 1人。
 const SEATS = {
-  chair: { dy: -6, show: 0.7, scale: 0.78, slots: 1 },
-  sofa: { dy: -5, show: 0.68, scale: 0.7, slots: 1, ox: -8 },
-  kotatsu: { dy: -2, show: 0.4, scale: 0.72, slots: 2, spread: 10 },
-  bed: { dy: -12, show: 0.38, scale: 0.52, slots: 1 },
-  bath: { dy: -4, show: 0.4, scale: 0.62, slots: 1 },
+  chair: { dy: -6, show: 0.82, scale: 0.78, slots: 1 },
+  sofa: { dy: -5, show: 0.8, scale: 0.7, slots: 1, ox: -8 },
+  kotatsu: { dy: -6, art: "kotatsu", scale: 1, slots: 2, spread: 11, pw: 58, pb: 34 },
+  bed: { dy: -7, art: "bed", scale: 1, slots: 1, pw: 40, pb: 30 },
+  bath: { dy: -5, art: "bath", scale: 1, slots: 1, ox: -3, pw: 46, pb: 34 },
 };
 
 // 縮んだあとの 体の位置で、下を かくす
@@ -242,6 +242,39 @@ const House = {
     });
   },
 
+  // こたつ・ベッド・ふろは 服の絵を しまって、頭だけの絵を 出す
+  applySitVisual(w, spec) {
+    w.node.classList.add("sitting");
+    w.flip.classList.remove("left");
+    if (spec.art) {
+      w.node.classList.add("peeking");
+      w.flip.style.clipPath = "";
+      if (!w.peek) {
+        const img = el("img", "sit-peek");
+        img.alt = "";
+        img.draggable = false;
+        img.style.position = "absolute";
+        img.style.left = "50%";
+        img.style.height = "auto";
+        img.style.transform = "translateX(-50%)";
+        img.style.zIndex = "2";
+        img.onclick = () => this.tapWalker(w);
+        w.node.appendChild(img);
+        w.peek = img;
+      }
+      w.peek.src = `img/sit/${w.id}_${spec.art}.webp`;
+      w.peek.hidden = false;
+      w.peek.style.width = spec.pw + "%";
+      w.peek.style.bottom = spec.pb + "%";
+      w.chara.style.visibility = "hidden";
+    } else {
+      w.node.classList.remove("peeking");
+      if (w.peek) w.peek.hidden = true;
+      w.chara.style.visibility = "";
+      w.flip.style.clipPath = `inset(0 0 ${sitClip(spec)}% 0)`;
+    }
+  },
+
   beginSit(w, spot, now) {
     w.state = "sit";
     w.seat = spot;
@@ -250,9 +283,7 @@ const House = {
     w.y = spot.y;
     w.sitScale = spot.spec.scale;
     w.sitZ = Math.round(spot.y - spot.spec.dy) + 2;
-    w.node.classList.add("sitting");
-    // ふきだしは 体の外なので、かくすのは 体だけ
-    w.flip.style.clipPath = `inset(0 0 ${sitClip(spot.spec)}% 0)`;
+    this.applySitVisual(w, spot.spec);
     // 立ち止まる 時間のあいだ だけ 入って、終わったら 歩きだす
     w.sitUntil = now + (1.2 + Math.random() * 2.8) * 1000;
     this.setPose(w, "normal");
@@ -263,7 +294,10 @@ const House = {
     w.sitScale = 0;
     w.sitZ = 0;
     w.node.classList.remove("sitting");
+    w.node.classList.remove("peeking");
     w.flip.style.clipPath = "";
+    w.chara.style.visibility = "";
+    if (w.peek) w.peek.hidden = true;
     w.sitCooldown = performance.now() + 5000;
     const floor = this.floorNow;
     w.tx = floor.left + Math.random() * (floor.right - floor.left);
@@ -295,8 +329,7 @@ const House = {
         w.y = place.y + spec.dy;
         w.sitScale = spec.scale;
         w.sitZ = Math.round(place.y) + 2;
-        w.node.classList.add("sitting");
-        w.flip.style.clipPath = `inset(0 0 ${sitClip(spec)}% 0)`;
+        this.applySitVisual(w, spec);
       }
     }
     if (w.state === "idle") {

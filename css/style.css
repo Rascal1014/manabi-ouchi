@@ -1212,6 +1212,20 @@ img.placed {
 /* 家具に 入っているあいだは 足もとの かげを 出さない */
 .walker.sitting::before { opacity: 0; }
 
+/* こたつ・ベッド・ふろは、服の全身を 出さず 頭だけの絵にする */
+.walker.peeking .pose-stack { visibility: hidden; }
+
+.sit-peek {
+  position: absolute;
+  left: 50%;
+  bottom: var(--peek-bottom, 30%);
+  width: var(--peek-w, 60%);
+  height: auto;
+  transform: translateX(-50%);
+  pointer-events: auto;
+  z-index: 2;
+}
+
 /* 足もとのかげ */
 .walker::before {
   content: "";
