@@ -1209,6 +1209,9 @@ img.placed {
   transform-origin: 50% 96%;
 }
 
+/* 家具に 入っているあいだは 足もとの かげを 出さない */
+.walker.sitting::before { opacity: 0; }
+
 /* 足もとのかげ */
 .walker::before {
   content: "";

@@ -1,6 +1,23 @@
 // 家具ぜんたいの大きさ（shop.js の size に かける）。キャラより少し大きいくらいに見せる
 const FURNITURE_SCALE = 1.8;
 
+// 近づいたら、立ち止まりのあいだ 入る 家具。
+// show は 絵の上から どこまで 見せるか。いす・ソファは 服まで。ほかは 頭だけ。
+// scale は 足もとを 基準に ちぢむ。こたつだけ 2人。ほかは 1人。
+const SEATS = {
+  chair: { dy: -6, show: 0.7, scale: 0.78, slots: 1 },
+  sofa: { dy: -5, show: 0.68, scale: 0.7, slots: 1, ox: -8 },
+  kotatsu: { dy: -2, show: 0.4, scale: 0.72, slots: 2, spread: 10 },
+  bed: { dy: -12, show: 0.38, scale: 0.52, slots: 1 },
+  bath: { dy: -4, show: 0.4, scale: 0.62, slots: 1 },
+};
+
+// 縮んだあとの 体の位置で、下を かくす
+function sitClip(spec) {
+  const mapped = 95 + (spec.show * 100 - 95) * spec.scale;
+  return Math.max(0, Math.min(78, Math.round(100 - mapped)));
+}
+
 const House = {
   area: "1f",
   selected: null, // 選んでいる家具の uid
@@ -169,6 +186,8 @@ const House = {
       }
       const dt = Math.min(0.05, (now - last) / 1000);
       last = now;
+      // 近い人から 席を 決める。同じ 席に あとから 来た人は 入れない
+      this.assignSeats(now);
       this.walkers.forEach((w) => this.updateWalker(w, dt, now));
       if (now > this.nextTalk && this.walkers.length) {
         const free = this.walkers.filter((w) => now > w.talkUntil && w.state !== "busy");
@@ -178,6 +197,82 @@ const House = {
       this.raf = requestAnimationFrame(tick);
     };
     this.raf = requestAnimationFrame(tick);
+  },
+
+  // このへやに おいてある、すわれる 家具の 席
+  seatSpots() {
+    const spots = [];
+    Store.data.placements
+      .filter((p) => p.area === this.area && SEATS[p.item])
+      .forEach((p) => {
+        const spec = SEATS[p.item];
+        for (let slot = 0; slot < spec.slots; slot++) {
+          const ox = spec.slots === 1 ? (spec.ox || 0) : slot === 0 ? -spec.spread : spec.spread;
+          spots.push({ uid: p.uid, item: p.item, slot, ox, x: p.x + ox, y: p.y + spec.dy, spec });
+        }
+      });
+    return spots;
+  },
+
+  seatTaken(spot, except) {
+    return this.walkers.some((o) => o !== except && o.seat && o.seat.uid === spot.uid && o.seat.slot === spot.slot);
+  },
+
+  // 空いている 席に、いちばん 近くまで 来た キャラから 入れる
+  assignSeats(now) {
+    const spots = this.seatSpots().filter((s) => !this.seatTaken(s));
+    const pairs = [];
+    this.walkers.forEach((w) => {
+      if (w.state !== "walk" && w.state !== "idle") return;
+      if (now <= (w.sitCooldown || 0)) return;
+      spots.forEach((spot) => {
+        const dist = Math.hypot(spot.x - w.x, (spot.y - w.y) * 1.4);
+        if (dist < 8) pairs.push({ w, spot, dist });
+      });
+    });
+    pairs.sort((a, b) => a.dist - b.dist);
+    const usedWalker = new Set();
+    const usedSpot = new Set();
+    pairs.forEach((p) => {
+      const key = p.spot.uid + ":" + p.spot.slot;
+      if (usedWalker.has(p.w) || usedSpot.has(key)) return;
+      usedWalker.add(p.w);
+      usedSpot.add(key);
+      this.beginSit(p.w, p.spot, now);
+    });
+  },
+
+  beginSit(w, spot, now) {
+    w.state = "sit";
+    w.seat = spot;
+    w.speed = 0;
+    w.x = spot.x;
+    w.y = spot.y;
+    w.sitScale = spot.spec.scale;
+    w.sitZ = Math.round(spot.y - spot.spec.dy) + 2;
+    w.node.classList.add("sitting");
+    // ふきだしは 体の外なので、かくすのは 体だけ
+    w.flip.style.clipPath = `inset(0 0 ${sitClip(spot.spec)}% 0)`;
+    // 立ち止まる 時間のあいだ だけ 入って、終わったら 歩きだす
+    w.sitUntil = now + (1.2 + Math.random() * 2.8) * 1000;
+    this.setPose(w, "normal");
+  },
+
+  endSit(w) {
+    w.seat = null;
+    w.sitScale = 0;
+    w.sitZ = 0;
+    w.node.classList.remove("sitting");
+    w.flip.style.clipPath = "";
+    w.sitCooldown = performance.now() + 5000;
+    const floor = this.floorNow;
+    w.tx = floor.left + Math.random() * (floor.right - floor.left);
+    w.ty = floor.top + Math.random() * (floor.bottom - floor.top);
+    w.state = "walk";
+    w.beat = 0;
+    w.beatDist = 0;
+    w.view = w.ty < w.y ? "walkb" : "walkf";
+    this.setPose(w, "normal");
   },
 
   updateWalker(w, dt, now) {
@@ -190,11 +285,33 @@ const House = {
       w.state = "idle";
       w.wait = 0.6;
     }
+    if (w.state === "sit") {
+      const place = Store.data.placements.find((p) => p.uid === w.seat.uid && p.area === this.area);
+      if (!place || now > w.sitUntil) {
+        this.endSit(w);
+      } else {
+        const spec = SEATS[place.item];
+        w.x = place.x + (w.seat.ox || 0);
+        w.y = place.y + spec.dy;
+        w.sitScale = spec.scale;
+        w.sitZ = Math.round(place.y) + 2;
+        w.node.classList.add("sitting");
+        w.flip.style.clipPath = `inset(0 0 ${sitClip(spec)}% 0)`;
+      }
+    }
     if (w.state === "idle") {
       w.wait -= dt;
       if (w.wait <= 0) {
-        w.tx = floor.left + Math.random() * (floor.right - floor.left);
-        w.ty = floor.top + Math.random() * (floor.bottom - floor.top);
+        const spots = this.seatSpots().filter((s) => !this.seatTaken(s));
+        const goSit = spots.length && now > (w.sitCooldown || 0) && Math.random() < 0.7;
+        if (goSit) {
+          const spot = spots[Math.floor(Math.random() * spots.length)];
+          w.tx = spot.x;
+          w.ty = spot.y;
+        } else {
+          w.tx = floor.left + Math.random() * (floor.right - floor.left);
+          w.ty = floor.top + Math.random() * (floor.bottom - floor.top);
+        }
         w.state = "walk";
         w.beat = 0;
         w.beatDist = 0;
@@ -238,6 +355,13 @@ const House = {
     let tilt = Math.sin((p * Math.PI) / 2) * 2 * a;
     let sx = 1 + Math.sin(now / 420) * 0.012 * (1 - a);
     let sy = 1 - Math.sin(now / 420) * 0.015 * (1 - a);
+    if (w.state !== "sit") {
+      w.sitScale = 0;
+      w.sitZ = 0;
+    } else if (w.sitScale) {
+      sx *= w.sitScale;
+      sy *= w.sitScale;
+    }
 
     // ぴょんとジャンプ
     if (w.hopAt) {
@@ -258,11 +382,12 @@ const House = {
     n.top = w.y.toFixed(2) + "%";
     n.setProperty("--depth", this.depthScale(w.y, floor).toFixed(3));
     // しゃべっている間は、ふきだしが かくれないように前に出す
-    n.zIndex = Math.round(w.y) + (now < w.talkUntil ? 100 : 0);
+    n.zIndex = (w.sitZ || Math.round(w.y)) + (now < w.talkUntil ? 100 : 0);
   },
 
   tapWalker(w) {
     if (w.state === "busy") return;
+    if (w.state === "sit") this.endSit(w);
     const now = performance.now();
     Sound.correct();
     w.state = "busy";
