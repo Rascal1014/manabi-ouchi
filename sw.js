@@ -1,5 +1,5 @@
 // ファイルを更新したら CACHE の番号を上げる
-const CACHE = "manabi-ouchi-v23";
+const CACHE = "manabi-ouchi-v24";
 
 const FILES = [
   "./",

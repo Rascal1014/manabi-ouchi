@@ -117,7 +117,7 @@ function addWear(wrap, charId, mood) {
     // 日傘のように 顔に かぶる ものや はねは、前から見たとき 体の うしろに まわす
     const behind = bag.wear && (bag.wear.behind || hold === "wings") && !back ? " wear-behind" : "";
     const node = renderItemVisual(shown, `wear wear-bag mood-${mood}${behind}`);
-    fitWear(node, "bag", bag.image && bag.wear, f, back);
+    fitWear(node, "bag", bag.image && bag.wear, f, back, charId);
     wrap.appendChild(node);
   }
 
@@ -126,14 +126,16 @@ function addWear(wrap, charId, mood) {
   const head = get("head") || (set && { image: set.image, name: clothes.name, wear: set });
   if (head) {
     const node = renderItemVisual(view(head), `wear wear-head mood-${mood}`);
-    fitWear(node, "head", head.image && head.wear, f, back);
+    fitWear(node, "head", head.image && head.wear, f, back, charId);
     wrap.appendChild(node);
   }
 }
 
 // 画像の服・こものを、キャラの体の位置と大きさに合わせる（絵文字のものは CSS の位置のまま）
-function fitWear(node, slot, w, f, back = false) {
+function fitWear(node, slot, w, f, back = false, charId = "") {
   if (!w || !f) return;
+  // キャラごとに 位置を かえる（耳や はっぱで 頭の形が ちがうため）
+  if (w.by && w.by[charId]) w = { ...w, ...w.by[charId] };
   const s = node.style;
   if (slot === "head") {
     // 頭の大きさに対して、キャラごとに ぼうしの大きさを ちょうせいする（hatScale）
@@ -163,10 +165,10 @@ function fitWear(node, slot, w, f, back = false) {
     s.top = f.neck + 14 + "%";
     s.transform = "translate(-50%, -50%)";
   } else if (w.hold === "shoulder") {
-    // かたひもの上のはしを かたに かけて、体の よこに さげる
+    // 肩ひもの 上はしを かたに かけて、体の よこに さげる
     s.width = w.w + "%";
-    s.left = f.bodyX + f.bodyW * 0.38 + "%";
-    s.top = f.neck + 1 + "%";
+    s.left = f.bodyX + f.bodyW * (w.kx ?? 0.42) + "%";
+    s.top = f.neck + (w.ky ?? 0) + "%";
     s.transform = "translate(-50%, 0)";
   } else {
     // hand・pull: 絵の (ax, ay) の ところを 手の位置に あわせる
