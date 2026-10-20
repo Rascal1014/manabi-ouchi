@@ -2,12 +2,13 @@
 const FURNITURE_SCALE = 1.8;
 
 // 近づいたら、立ち止まりのあいだ 入る 家具。
-// いす・ソファは 服を着たまま。こたつ・ベッド・ふろは 服を出さず、頭だけの絵。
-// こたつだけ 2人。ほかは 1人。
+// いすは 服を着たまま。ソファは 見本どおり 座った絵。
+// こたつは 2人、テントは 1人。どちらも 顔だけ。ベッド・ふろも 顔だけ。
 const SEATS = {
-  chair: { dy: -6, show: 0.82, scale: 0.78, slots: 1 },
-  sofa: { dy: -5, show: 0.8, scale: 0.7, slots: 1, ox: -8 },
-  kotatsu: { dy: -6, art: "kotatsu", scale: 1, slots: 2, spread: 11, pw: 58, pb: 34 },
+  chair: { dy: -4, art: "chair", show: 0.82, scale: 0.78, slots: 1, pw: 78, pb: 16 },
+  sofa: { dy: -4, art: "sofa", scale: 1, slots: 1, ox: -7, pw: 74, pb: 8 },
+  kotatsu: { dy: -5, art: "kotatsu", scale: 1, slots: 2, spread: 5, pw: 42, pb: 12 },
+  tent: { dy: -4, art: "kotatsu", scale: 1, slots: 1, pw: 52, pb: 16 },
   bed: { dy: -7, art: "bed", scale: 1, slots: 1, pw: 40, pb: 30 },
   bath: { dy: -5, art: "bath", scale: 1, slots: 1, ox: -3, pw: 46, pb: 34 },
 };
@@ -242,11 +243,23 @@ const House = {
     });
   },
 
+  // 服を着て ソファ・いすに座るときは、その服の座り絵。ないときは 今までの絵。
+  sitSrc(w, spec) {
+    if (!spec.art) return null;
+    const clothes = wornClothes(w.id);
+    if ((spec.art === "sofa" || spec.art === "chair") && clothes) {
+      return `img/sit/${w.id}_${clothes.id}_${spec.art}.webp`;
+    }
+    if (spec.art === "chair") return null;
+    return `img/sit/${w.id}_${spec.art}.webp`;
+  },
+
   // こたつ・ベッド・ふろは 服の絵を しまって、頭だけの絵を 出す
   applySitVisual(w, spec) {
     w.node.classList.add("sitting");
     w.flip.classList.remove("left");
-    if (spec.art) {
+    const src = this.sitSrc(w, spec);
+    if (src) {
       w.node.classList.add("peeking");
       w.flip.style.clipPath = "";
       if (!w.peek) {
@@ -262,7 +275,13 @@ const House = {
         w.node.appendChild(img);
         w.peek = img;
       }
-      w.peek.src = `img/sit/${w.id}_${spec.art}.webp`;
+      w.peek.onerror = () => {
+        w.peek.hidden = true;
+        w.node.classList.remove("peeking");
+        w.chara.style.visibility = "";
+        if (spec.show) w.flip.style.clipPath = `inset(0 0 ${sitClip(spec)}% 0)`;
+      };
+      w.peek.src = src;
       w.peek.hidden = false;
       w.peek.style.width = spec.pw + "%";
       w.peek.style.bottom = spec.pb + "%";
