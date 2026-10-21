@@ -5,10 +5,10 @@ const FURNITURE_SCALE = 1.8;
 // いすは 服を着たまま。ソファは 見本どおり 座った絵。
 // こたつは 2人、テントは 1人。どちらも 顔だけ。ベッド・ふろも 顔だけ。
 const SEATS = {
-  chair: { dy: -4, art: "chair", show: 0.82, scale: 0.78, slots: 1, pw: 78, pb: 16 },
-  sofa: { dy: -4, art: "sofa", scale: 1, slots: 1, ox: -7, pw: 74, pb: 8 },
-  kotatsu: { dy: -5, art: "kotatsu", scale: 1, slots: 2, spread: 5, pw: 42, pb: 12 },
-  tent: { dy: -4, art: "kotatsu", scale: 1, slots: 1, pw: 52, pb: 16 },
+  chair: { dy: -8, art: "chair", show: 0.82, scale: 0.78, slots: 1, pw: 46, pb: 18 },
+  sofa: { dy: -6, art: "sofa", scale: 1, slots: 1, ox: -9, pw: 58, pb: 10 },
+  kotatsu: { dy: -4, art: "kotatsu", scale: 1, slots: 2, spread: 3.6, ox: -3.4, pw: 52, pb: 2, behind: true },
+  tent: { dy: -1, art: "kotatsu", scale: 1, slots: 1, pw: 90, pb: 14 },
   bed: { dy: -7, art: "bed", scale: 1, slots: 1, pw: 40, pb: 30 },
   bath: { dy: -5, art: "bath", scale: 1, slots: 1, ox: -3, pw: 46, pb: 34 },
 };
@@ -208,7 +208,8 @@ const House = {
       .forEach((p) => {
         const spec = SEATS[p.item];
         for (let slot = 0; slot < spec.slots; slot++) {
-          const ox = spec.slots === 1 ? (spec.ox || 0) : slot === 0 ? -spec.spread : spec.spread;
+          const base = spec.ox || 0;
+          const ox = spec.slots === 1 ? base : base + (slot === 0 ? -spec.spread : spec.spread);
           spots.push({ uid: p.uid, item: p.item, slot, ox, x: p.x + ox, y: p.y + spec.dy, spec });
         }
       });
@@ -283,7 +284,23 @@ const House = {
       };
       w.peek.src = src;
       w.peek.hidden = false;
-      w.peek.style.width = spec.pw + "%";
+      const fitPeek = () => {
+        let scale = 1;
+        if (spec.art === "sofa" || spec.art === "chair") {
+          const aspect = w.peek.naturalHeight / (w.peek.naturalWidth || 1);
+          scale = 1.45 / aspect;
+          if (w.id === "ribbon") scale *= 1.08;
+        } else if (w.id === "pom" && !spec.behind) {
+          scale = 0.82;
+        }
+        if (spec.slots > 1 && w.seat) {
+          const mates = this.walkers.filter((o) => o.seat && o.seat.uid === w.seat.uid).length;
+          if (mates >= 2) scale *= 0.74;
+        }
+        w.peek.style.width = spec.pw * scale + "%";
+      };
+      w.peek.onload = fitPeek;
+      if (w.peek.complete && w.peek.naturalWidth) fitPeek();
       w.peek.style.bottom = spec.pb + "%";
       w.chara.style.visibility = "hidden";
     } else {
@@ -301,7 +318,7 @@ const House = {
     w.x = spot.x;
     w.y = spot.y;
     w.sitScale = spot.spec.scale;
-    w.sitZ = Math.round(spot.y - spot.spec.dy) + 2;
+    w.sitZ = spot.spec.behind ? Math.round(spot.y - spot.spec.dy) - 1 : Math.round(spot.y - spot.spec.dy) + 2;
     this.applySitVisual(w, spot.spec);
     // 立ち止まる 時間のあいだ だけ 入って、終わったら 歩きだす
     w.sitUntil = now + (1.2 + Math.random() * 2.8) * 1000;
@@ -344,10 +361,11 @@ const House = {
         this.endSit(w);
       } else {
         const spec = SEATS[place.item];
-        w.x = place.x + (w.seat.ox || 0);
+        const mates = this.walkers.filter((o) => o.seat && o.seat.uid === w.seat.uid);
+        w.x = place.x + (mates.length < 2 ? (spec.ox || 0) : (w.seat.ox || 0));
         w.y = place.y + spec.dy;
         w.sitScale = spec.scale;
-        w.sitZ = Math.round(place.y) + 2;
+        w.sitZ = spec.behind ? Math.round(place.y) - 1 : Math.round(place.y) + 2;
         this.applySitVisual(w, spec);
       }
     }
@@ -433,8 +451,8 @@ const House = {
     n.left = w.x.toFixed(2) + "%";
     n.top = w.y.toFixed(2) + "%";
     n.setProperty("--depth", this.depthScale(w.y, floor).toFixed(3));
-    // しゃべっている間は、ふきだしが かくれないように前に出す
-    n.zIndex = (w.sitZ || Math.round(w.y)) + (now < w.talkUntil ? 100 : 0);
+    const talking = now < w.talkUntil && !(w.seat && w.seat.spec && w.seat.spec.behind);
+    n.zIndex = (w.sitZ || Math.round(w.y)) + (talking ? 100 : 0);
   },
 
   tapWalker(w) {
