@@ -75,7 +75,7 @@ const ITEMS = [
   { id: "pot_rose", category: "furniture", name: "はちうえ（バラ）", icon: "🌹", price: 100, size: 17, image: "img/furniture/pot_rose.webp" },
   { id: "pot_lily", category: "furniture", name: "はちうえ（すずらん）", icon: "🪻", price: 100, size: 17, image: "img/furniture/pot_lily.webp" },
   { id: "plant", category: "furniture", name: "かんようしょくぶつ", icon: "🪴", price: 100, size: 13, image: "img/furniture/plant.webp" },
-  { id: "chair", category: "furniture", name: "いす", icon: "🪑", price: 100, size: 16, image: "img/furniture/chair.webp" },
+  { id: "chair", category: "furniture", name: "いす", icon: "🪑", price: 100, size: 24, image: "img/furniture/chair.webp" },
   { id: "lamp", category: "furniture", name: "でんき", icon: "💡", price: 120, size: 15, image: "img/furniture/lamp.webp" },
   { id: "sunflower", category: "furniture", name: "ひまわり", icon: "🌻", price: 120, size: 17, image: "img/furniture/sunflower.webp" },
   { id: "dandelion", category: "furniture", name: "たんぽぽ", icon: "🌼", price: 120, size: 17, image: "img/furniture/dandelion.webp" },

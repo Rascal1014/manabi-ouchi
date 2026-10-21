@@ -5,9 +5,9 @@ const FURNITURE_SCALE = 1.8;
 // いすは 服を着たまま。ソファは 見本どおり 座った絵。
 // こたつは 2人、テントは 1人。どちらも 顔だけ。ベッド・ふろも 顔だけ。
 const SEATS = {
-  chair: { dy: -8, art: "chair", show: 0.82, scale: 0.78, slots: 1, pw: 46, pb: 18 },
+  chair: { dy: -8, art: "chair", show: 0.82, scale: 0.78, slots: 1, pw: 82, pb: 26 },
   sofa: { dy: -6, art: "sofa", scale: 1, slots: 1, ox: -9, pw: 58, pb: 10 },
-  kotatsu: { dy: -4, art: "kotatsu", scale: 1, slots: 2, spread: 3.6, ox: -3.4, pw: 52, pb: 2, behind: true },
+  kotatsu: { dy: -5, art: "kotatsu", scale: 1, slots: 2, spread: 5, pw: 42, pb: 12, scene: true },
   tent: { dy: -1, art: "kotatsu", scale: 1, slots: 1, pw: 90, pb: 14 },
   bed: { dy: -7, art: "bed", scale: 1, slots: 1, pw: 40, pb: 30 },
   bath: { dy: -5, art: "bath", scale: 1, slots: 1, ox: -3, pw: 46, pb: 34 },
@@ -101,6 +101,7 @@ const House = {
         const item = getItem(p.item);
         if (!item) return;
         const node = renderItemVisual(item, "placed" + (p.uid === this.selected ? " selected" : ""));
+        node.dataset.uid = p.uid;
         node.style.setProperty("--size", (item.size || 14) * FURNITURE_SCALE);
         this.placeFurniture(node, p, floor);
         this.makeDraggable(node, p, floor);
@@ -131,6 +132,34 @@ const House = {
   depthScale(y, floor) {
     const d = Math.max(0, Math.min(1, (y - floor.top) / (floor.bottom - floor.top)));
     return 0.72 + d * 0.38;
+  },
+
+  // こたつは空なら閉じた絵、人が入ったらその組み合わせの絵
+  syncKotatsuScenes() {
+    const room = $("#room");
+    if (!room) return;
+    const order = ["haro", "ribbon", "pom"];
+    Store.data.placements
+      .filter((p) => p.area === this.area && SEATS[p.item] && SEATS[p.item].scene)
+      .forEach((p) => {
+        const node = room.querySelector(`.placed[data-uid="${p.uid}"]`);
+        if (!node) return;
+        const ids = this.walkers
+          .filter((w) => w.state === "sit" && w.seat && w.seat.uid === p.uid)
+          .map((w) => w.id)
+          .sort((a, b) => order.indexOf(a) - order.indexOf(b));
+        const src = ids.length
+          ? `img/furniture/${p.item}_${ids.join("_")}.webp`
+          : `img/furniture/${p.item}.webp`;
+        if (node.dataset.scene === src) return;
+        node.dataset.scene = src;
+        node.onerror = () => {
+          node.onerror = null;
+          node.dataset.scene = `img/furniture/${p.item}.webp`;
+          node.src = node.dataset.scene;
+        };
+        node.src = src;
+      });
   },
 
   // 家具は足もと（下のはし）が p.x, p.y
@@ -190,6 +219,7 @@ const House = {
       // 近い人から 席を 決める。同じ 席に あとから 来た人は 入れない
       this.assignSeats(now);
       this.walkers.forEach((w) => this.updateWalker(w, dt, now));
+      this.syncKotatsuScenes();
       if (now > this.nextTalk && this.walkers.length) {
         const free = this.walkers.filter((w) => now > w.talkUntil && w.state !== "busy");
         if (free.length) this.say(free[Math.floor(Math.random() * free.length)], now);
@@ -259,6 +289,14 @@ const House = {
   applySitVisual(w, spec) {
     w.node.classList.add("sitting");
     w.flip.classList.remove("left");
+    // こたつは、入った人数の絵に家具ごと切りかえる。顔の重ね絵は出さない
+    if (spec.scene) {
+      w.node.classList.add("peeking");
+      w.flip.style.clipPath = "";
+      w.chara.style.visibility = "hidden";
+      if (w.peek) w.peek.hidden = true;
+      return;
+    }
     const src = this.sitSrc(w, spec);
     if (src) {
       w.node.classList.add("peeking");
@@ -290,12 +328,8 @@ const House = {
           const aspect = w.peek.naturalHeight / (w.peek.naturalWidth || 1);
           scale = 1.45 / aspect;
           if (w.id === "ribbon") scale *= 1.08;
-        } else if (w.id === "pom" && !spec.behind) {
+        } else if (w.id === "pom") {
           scale = 0.82;
-        }
-        if (spec.slots > 1 && w.seat) {
-          const mates = this.walkers.filter((o) => o.seat && o.seat.uid === w.seat.uid).length;
-          if (mates >= 2) scale *= 0.74;
         }
         w.peek.style.width = spec.pw * scale + "%";
       };
@@ -318,7 +352,7 @@ const House = {
     w.x = spot.x;
     w.y = spot.y;
     w.sitScale = spot.spec.scale;
-    w.sitZ = spot.spec.behind ? Math.round(spot.y - spot.spec.dy) - 1 : Math.round(spot.y - spot.spec.dy) + 2;
+    w.sitZ = Math.round(spot.y - spot.spec.dy) + 2;
     this.applySitVisual(w, spot.spec);
     // 立ち止まる 時間のあいだ だけ 入って、終わったら 歩きだす
     w.sitUntil = now + (1.2 + Math.random() * 2.8) * 1000;
@@ -361,11 +395,10 @@ const House = {
         this.endSit(w);
       } else {
         const spec = SEATS[place.item];
-        const mates = this.walkers.filter((o) => o.seat && o.seat.uid === w.seat.uid);
-        w.x = place.x + (mates.length < 2 ? (spec.ox || 0) : (w.seat.ox || 0));
+        w.x = place.x + (w.seat.ox || 0);
         w.y = place.y + spec.dy;
         w.sitScale = spec.scale;
-        w.sitZ = spec.behind ? Math.round(place.y) - 1 : Math.round(place.y) + 2;
+        w.sitZ = Math.round(place.y) + 2;
         this.applySitVisual(w, spec);
       }
     }
@@ -451,8 +484,7 @@ const House = {
     n.left = w.x.toFixed(2) + "%";
     n.top = w.y.toFixed(2) + "%";
     n.setProperty("--depth", this.depthScale(w.y, floor).toFixed(3));
-    const talking = now < w.talkUntil && !(w.seat && w.seat.spec && w.seat.spec.behind);
-    n.zIndex = (w.sitZ || Math.round(w.y)) + (talking ? 100 : 0);
+    n.zIndex = (w.sitZ || Math.round(w.y)) + (now < w.talkUntil ? 100 : 0);
   },
 
   tapWalker(w) {
