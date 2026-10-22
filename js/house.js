@@ -6,11 +6,11 @@ const FURNITURE_SCALE = 1.8;
 // こたつは 2人、テントは 1人。どちらも 顔だけ。ベッド・ふろも 顔だけ。
 const SEATS = {
   chair: { dy: -8, art: "chair", show: 0.82, scale: 0.78, slots: 1, pw: 82, pb: 26 },
-  sofa: { dy: -6, art: "sofa", scale: 1, slots: 1, ox: -9, pw: 58, pb: 10 },
+  sofa: { dy: -6, art: "sofa", scale: 1, slots: 1, ox: 0, pw: 75, pb: 10 },
   kotatsu: { dy: -5, art: "kotatsu", scale: 1, slots: 2, spread: 5, pw: 42, pb: 12, scene: true },
   tent: { dy: -1, art: "kotatsu", scale: 1, slots: 1, pw: 90, pb: 14 },
   bed: { dy: -7, art: "bed", scale: 1, slots: 1, pw: 40, pb: 30 },
-  bath: { dy: -5, art: "bath", scale: 1, slots: 1, ox: -3, pw: 46, pb: 34 },
+  bath: { dy: -5, art: "bath", scale: 1, slots: 1, ox: -3, pw: 60, pb: 34 },
 };
 
 // 縮んだあとの 体の位置で、下を かくす
